@@ -1,0 +1,15 @@
+.git
+.github
+node_modules
+**/node_modules
+.next
+**/.next
+.turbo
+**/.turbo
+coverage
+storybook-static
+playwright-report
+test-results
+blob-report
+*.log
+.DS_Store

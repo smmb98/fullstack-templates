@@ -1,0 +1,23 @@
+# syntax=docker/dockerfile:1
+# Pinned toolchain for every dev/test command. Node 26.13.1 is the current LTS.
+FROM node:26.13.1-bookworm-slim
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends git ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Node 26 no longer bundles corepack, so install it explicitly, then pin pnpm.
+RUN npm install -g corepack@0.36.0 \
+  && corepack enable \
+  && corepack prepare pnpm@12.21.0 --activate
+
+ENV PNPM_HOME=/pnpm
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN mkdir -p /repo /pnpm /pnpm-store \
+  && chown -R node:node /repo /pnpm /pnpm-store
+
+USER node
+WORKDIR /repo

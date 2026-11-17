@@ -1,0 +1,65 @@
+name: showcase
+
+x-env: &env
+  CI: "true"
+  NEXT_TELEMETRY_DISABLED: "1"
+
+x-dev-volumes: &dev-volumes
+  - .:/repo
+  - root_node_modules:/repo/node_modules
+  - shop_node_modules:/repo/apps/shop/node_modules
+  - config_node_modules:/repo/packages/config/node_modules
+  - contract_node_modules:/repo/packages/api-contract/node_modules
+  - mocks_node_modules:/repo/packages/mocks/node_modules
+  - ui_node_modules:/repo/packages/ui/node_modules
+  - next_cache:/repo/apps/shop/.next
+  - pnpm_store:/pnpm-store
+
+x-dev-service: &dev-service
+  build:
+    context: .
+    dockerfile: docker/Dockerfile.dev
+  working_dir: /repo
+  environment: *env
+  volumes: *dev-volumes
+
+services:
+  tools:
+    <<: *dev-service
+    command: ["sleep", "infinity"]
+
+  app:
+    <<: *dev-service
+    command: pnpm --filter @showcase/shop dev
+    environment:
+      <<: *env
+      NEXT_PUBLIC_DEMO_MODE: "true"
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "3000:3000"
+
+  storybook:
+    <<: *dev-service
+    command: pnpm --filter @showcase/shop storybook
+    ports:
+      - "6006:6006"
+
+  e2e:
+    image: mcr.microsoft.com/playwright:v1.65.1-noble
+    working_dir: /repo
+    environment:
+      <<: *env
+      PLAYWRIGHT_BASE_URL: http://app:3000
+    volumes: *dev-volumes
+    depends_on:
+      - app
+
+volumes:
+  root_node_modules:
+  shop_node_modules:
+  config_node_modules:
+  contract_node_modules:
+  mocks_node_modules:
+  ui_node_modules:
+  next_cache:
+  pnpm_store:
