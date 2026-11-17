@@ -16,6 +16,7 @@ x-dev-volumes: &dev-volumes
   - pnpm_store:/pnpm-store
 
 x-dev-service: &dev-service
+  image: showcase-dev
   build:
     context: .
     dockerfile: docker/Dockerfile.dev
