@@ -40,6 +40,8 @@ export interface AsyncRegionProps<T> {
   testId?: string;
   errorMessage?: string;
   onRetry?: () => void;
+  /** Distinct action for empty states (e.g. clear filters); defaults to retry. */
+  onEmptyAction?: () => void;
 }
 
 function errorKind(error: unknown): ApiErrorKind {
@@ -86,8 +88,7 @@ export function AsyncRegion<T>(props: AsyncRegionProps<T>) {
     content = (
       <EmptyState
         variant={state.slice("empty:".length) as EmptyVariant}
-        onAction={retry}
-        actionLabel="Reload"
+        onAction={props.onEmptyAction ?? retry}
       />
     );
   } else if (state.startsWith("error:")) {

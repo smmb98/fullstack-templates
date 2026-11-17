@@ -15,6 +15,15 @@ function Join-Args([string[]]$items) {
 # Docker creates empty mount-point dirs inside the bind mount for named volumes.
 # Remove them when empty so the host tree stays clean; never delete real files.
 function Clean-MountPoints {
+  # Never touch mount points while a long-running service uses them: deleting the host
+  # directory out from under a mounted volume restarts or corrupts Next/Storybook.
+  try {
+    $running = @(docker compose ps --status running --services)
+  } catch {
+    $running = @()
+  }
+  if ($running -contains "app" -or $running -contains "storybook") { return }
+
   $targets = @(
     "node_modules",
     "apps/shop/node_modules",

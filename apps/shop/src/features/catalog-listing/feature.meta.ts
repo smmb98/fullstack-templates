@@ -1,0 +1,43 @@
+import { defineFeature } from "../types";
+
+/** Seed of the real catalog. Phase 2 grows this slice; it is never deleted. */
+export default defineFeature({
+  id: "catalog-listing",
+  title: "Catalog listing",
+  flag: "catalogListing",
+  routes: ["/products"],
+  endpoints: ["products.list"],
+  states: [
+    "loading",
+    "refetching",
+    "ready",
+    "empty:first-use",
+    "empty:no-results",
+    "partial",
+    "error:network",
+    "error:timeout",
+    "error:http",
+    "error:unauthorized",
+    "error:forbidden",
+    "error:not-found",
+    "error:rate-limited",
+    "error:parse",
+  ],
+  scenarios: {
+    ok: "ready",
+    empty: "empty:no-results",
+    partial: "partial",
+    large: "ready",
+    flaky: "ready",
+    "error-500": "error:http",
+    "error-401": "error:unauthorized",
+    "error-403": "error:forbidden",
+    "error-404": "error:not-found",
+    "error-422": "error:http",
+    "rate-limit": "error:rate-limited",
+    "bad-json": "error:parse",
+  },
+  dependsOn: [],
+  tag: "catalog-listing",
+  nav: { label: "Collection", href: "/products", placement: "header" },
+});

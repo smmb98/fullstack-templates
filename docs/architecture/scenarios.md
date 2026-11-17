@@ -30,7 +30,8 @@ returns 400 `{ "error": "unsupported-scenario", "supported": [...] }` so typos f
 - Latency: `?latency=800` (ms)
 - Reset: `?scenario=reset`
 - In-app navigation uses the client util; it stores the value in the session cookie
-  `demo_scenario`. Route handlers and server components read the cookie.
+  `demo_scenario`. Route handlers and server components read the cookie. The cookie is written
+  by `apps/shop/src/proxy.ts` (Next 16's proxy file, formerly middleware).
 - Storybook reads `parameters.scenario` for region stories.
 
 ## Handlers

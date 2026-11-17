@@ -33,6 +33,11 @@ services:
   app:
     <<: *dev-service
     command: pnpm --filter @showcase/shop dev
+    networks:
+      default:
+        aliases:
+          # Chrome upgrades plain-http hostnames to https; *.localhost is exempt.
+          - app.localhost
     environment:
       <<: *env
       NEXT_PUBLIC_DEMO_MODE: "true"
@@ -51,7 +56,8 @@ services:
     working_dir: /repo/apps/shop
     environment:
       <<: *env
-      PLAYWRIGHT_BASE_URL: http://app:3000
+      PLAYWRIGHT_BASE_URL: http://app.localhost:3000
+      PLAYWRIGHT_HOST_RESOLVER_RULES: MAP app.localhost app
     volumes: *dev-volumes
     depends_on:
       - app

@@ -1,6 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+/**
+ * Next 16 proxy (formerly middleware). Stores the demo scenario/latency in cookies so a
+ * plain page load can drive every mock state; `?scenario=reset` clears them.
+ */
+export function proxy(request: NextRequest) {
   const scenario = request.nextUrl.searchParams.get("scenario");
   const latency = request.nextUrl.searchParams.get("latency");
   const response = NextResponse.next();

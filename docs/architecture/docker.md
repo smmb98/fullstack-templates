@@ -15,7 +15,13 @@ Read this when a command fails, you touch docker-compose/Dockerfile, or volumes 
 | `tools` | one-off commands (`pnpm install`, `check`, scripts), idle container | - |
 | `app` | Next.js dev server (`NEXT_PUBLIC_DEMO_MODE=true`) | 3000 |
 | `storybook` | Storybook with MSW addon | 6006 |
-| `e2e` | official Playwright image, reaches the app at `http://app:3000` | - |
+| `e2e` | official Playwright image, reaches the app at `http://app.localhost:3000` | - |
+
+Chrome maps every `*.localhost` name to loopback instead of asking Docker DNS, and it
+upgrades plain-http single-label hosts to https. The app container therefore gets the alias
+`app.localhost` and the e2e container passes
+`PLAYWRIGHT_HOST_RESOLVER_RULES=MAP app.localhost app` so Chromium resolves the alias back to
+the compose service inside the network. Do not use `http://app:3000` in Playwright.
 
 All four share `image: showcase-dev` except `e2e`, whose image tag matches the pinned
 `@playwright/test` minor version.

@@ -2,6 +2,10 @@ import { defineConfig, devices } from "@playwright/test";
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
 
+// Chrome resolves *.localhost to loopback and refuses plain http to other hosts,
+// so inside Docker we alias app.localhost to the compose service name explicitly.
+const hostResolverRules = process.env.PLAYWRIGHT_HOST_RESOLVER_RULES;
+
 export default defineConfig({
   testDir: "./e2e",
   outputDir: "./test-results",
@@ -20,6 +24,9 @@ export default defineConfig({
     video: "off",
     locale: "en-US",
     timezoneId: "UTC",
+    launchOptions: hostResolverRules
+      ? { args: [`--host-resolver-rules=${hostResolverRules}`] }
+      : {},
   },
   projects: [
     {
