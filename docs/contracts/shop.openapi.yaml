@@ -1,0 +1,314 @@
+openapi: 3.1.0
+info:
+  title: "Hearth & Grain shop API"
+  version: 0.0.0
+  description: Generated from the zod endpoint registry. Fake data only.
+paths:
+  "/products":
+    get:
+      operationId: products.list
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProductsListResponse"
+        default:
+          description: "ApiError envelope ({ error, message, fieldErrors? })"
+          content:
+            application/json:
+              schema:
+                type: object
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            default: 1
+            type: integer
+            minimum: 1
+            maximum: 9007199254740991
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            default: 12
+            type: integer
+            minimum: 1
+            maximum: 60
+        - name: sort
+          in: query
+          required: false
+          schema:
+            default: relevance
+            type: string
+            enum:
+              - relevance
+              - price-asc
+              - price-desc
+              - newest
+              - rating
+              - best-selling
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 120
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 80
+        - name: brand
+          in: query
+          required: false
+          schema:
+            type: string
+            maxLength: 80
+components:
+  schemas:
+    ProductsListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                minLength: 1
+              slug:
+                type: string
+                minLength: 1
+              title:
+                type: string
+                minLength: 1
+              description:
+                type: string
+              price:
+                type: object
+                properties:
+                  amount:
+                    type: integer
+                    minimum: 0
+                    maximum: 9007199254740991
+                  currency:
+                    type: string
+                    enum:
+                      - USD
+                      - PKR
+                required:
+                  - amount
+                  - currency
+                additionalProperties: false
+              compareAtPrice:
+                anyOf:
+                  - type: object
+                    properties:
+                      amount:
+                        type: integer
+                        minimum: 0
+                        maximum: 9007199254740991
+                      currency:
+                        type: string
+                        enum:
+                          - USD
+                          - PKR
+                    required:
+                      - amount
+                      - currency
+                    additionalProperties: false
+                  - type: "null"
+              rating:
+                type: number
+                minimum: 0
+                maximum: 5
+              reviewCount:
+                type: integer
+                minimum: 0
+                maximum: 9007199254740991
+              brand:
+                type:
+                  - string
+                  - "null"
+              category:
+                type: string
+                minLength: 1
+              categoryPath:
+                default: []
+                type: array
+                items:
+                  type: string
+              images:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    src:
+                      type: string
+                      minLength: 1
+                    alt:
+                      type: string
+                    width:
+                      type: integer
+                      exclusiveMinimum: 0
+                      maximum: 9007199254740991
+                    height:
+                      type: integer
+                      exclusiveMinimum: 0
+                      maximum: 9007199254740991
+                  required:
+                    - src
+                    - alt
+                    - width
+                    - height
+                  additionalProperties: false
+              inStock:
+                type: boolean
+              stock:
+                type: integer
+                minimum: 0
+                maximum: 9007199254740991
+              colors:
+                default: []
+                type: array
+                items:
+                  type: string
+              materials:
+                default: []
+                type: array
+                items:
+                  type: string
+              sizes:
+                default: []
+                type: array
+                items:
+                  type: string
+            required:
+              - id
+              - slug
+              - title
+              - description
+              - price
+              - compareAtPrice
+              - rating
+              - reviewCount
+              - brand
+              - category
+              - categoryPath
+              - images
+              - inStock
+              - stock
+              - colors
+              - materials
+              - sizes
+            additionalProperties: false
+        page:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 9007199254740991
+        total:
+          type: integer
+          minimum: 0
+          maximum: 9007199254740991
+        facets:
+          type: object
+          properties:
+            categories:
+              default: []
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                  label:
+                    type: string
+                  count:
+                    type: integer
+                    minimum: 0
+                    maximum: 9007199254740991
+                required:
+                  - value
+                  - label
+                  - count
+                additionalProperties: false
+            brands:
+              default: []
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                  label:
+                    type: string
+                  count:
+                    type: integer
+                    minimum: 0
+                    maximum: 9007199254740991
+                required:
+                  - value
+                  - label
+                  - count
+                additionalProperties: false
+            colors:
+              default: []
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                  label:
+                    type: string
+                  count:
+                    type: integer
+                    minimum: 0
+                    maximum: 9007199254740991
+                required:
+                  - value
+                  - label
+                  - count
+                additionalProperties: false
+            materials:
+              default: []
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                  label:
+                    type: string
+                  count:
+                    type: integer
+                    minimum: 0
+                    maximum: 9007199254740991
+                required:
+                  - value
+                  - label
+                  - count
+                additionalProperties: false
+          required:
+            - categories
+            - brands
+            - colors
+            - materials
+          additionalProperties: false
+        partial:
+          type: boolean
+      required:
+        - items
+        - page
+        - pageSize
+        - total
+      additionalProperties: false

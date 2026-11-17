@@ -6,6 +6,6 @@
 - STOP: report Phase 0, wait for "go"
 - [x] 4.5 Foundation packages
 - [x] 4.6 Storybook and Playwright harness
-- [ ] 4.7 Scripts
+- [x] 4.7 Scripts
 - [ ] 4.8 Sandbox slice proven
 - STOP: report Phase 1, wait for "go"

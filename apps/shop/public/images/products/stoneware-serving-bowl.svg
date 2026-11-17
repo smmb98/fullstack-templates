@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Stoneware Serving Bowl">
+  <title>Stoneware Serving Bowl</title>
+  <rect width="800" height="600" fill="#e2ece4" />
+  <circle cx="381" cy="317" r="160" fill="#1c5b3d" opacity="0.9" />
+  <rect x="314" y="313" width="224" height="240" rx="112" fill="#86c9a4" opacity="0.85" />
+  <circle cx="576" cy="372" r="72" fill="#8a6a1f" opacity="0.9" />
+    <rect x="64" y="468" width="218" height="4" fill="#102018" opacity="0.25" />
+    <rect x="64" y="454" width="205" height="4" fill="#102018" opacity="0.25" />
+    <rect x="64" y="440" width="272" height="4" fill="#102018" opacity="0.25" />
+    <rect x="64" y="426" width="292" height="4" fill="#102018" opacity="0.25" />
+</svg>

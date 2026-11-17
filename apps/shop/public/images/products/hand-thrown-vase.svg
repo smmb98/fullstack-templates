@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Hand-Thrown Vase">
+  <title>Hand-Thrown Vase</title>
+  <rect width="800" height="600" fill="#e2ece4" />
+  <circle cx="485" cy="280" r="118" fill="#1c5b3d" opacity="0.9" />
+  <rect x="175" y="284" width="224" height="240" rx="112" fill="#86c9a4" opacity="0.85" />
+  <circle cx="576" cy="372" r="72" fill="#8a6a1f" opacity="0.9" />
+    <rect x="64" y="468" width="169" height="4" fill="#102018" opacity="0.25" />
+    <rect x="64" y="454" width="243" height="4" fill="#102018" opacity="0.25" />
+    <rect x="64" y="440" width="228" height="4" fill="#102018" opacity="0.25" />
+    <rect x="64" y="426" width="355" height="4" fill="#102018" opacity="0.25" />
+    <rect x="64" y="412" width="274" height="4" fill="#102018" opacity="0.25" />
+</svg>

@@ -5,13 +5,14 @@ Phase: 1 (foundation) - in progress    Last updated: 2026-11-17
   flows:gen/flows:check, contrast:check (6 theme sets x 5 pairs pass WCAG AA).
 - 4.6 harness: Storybook 10.6.5 with theme/scheme/font toolbar + MSW `parameters.scenario`;
   Playwright 1.64.1 with desktop/mobile projects, `e2e/_harness` (scenario, state, offline,
-  axe), JSON report and `e2e:summary` (verified against a fake failure).
-- `./dev up` serves app (3000) and Storybook (6006, MSW worker 200); `./dev e2e --list` runs
-  through the official Playwright image (no pnpm inside it).
+  axe), JSON report and `e2e:summary`.
+- 4.7 scripts: `reduce:plan` (dry-run, dependency-aware), `gen-placeholders` (12 deterministic
+  SVGs), `contract:gen` (OpenAPI 3.1 from the zod registry) plus unit tests for flows,
+  contrast, e2e-report, reduce, placeholders and contract (26 tests). `pnpm check` green.
 ## Next 3
-1. 4.7 finish `reduce:plan`, `gen-placeholders`, `contract:gen` + unit tests for all scripts.
-2. 4.8 sandbox slice `catalog-listing` (meta, flag, card, stories, matrix, offline, axe).
-3. Then Phase 1 report and stop.
+1. 4.8 sandbox slice `catalog-listing` (meta, flag, card, stories, matrix, offline, axe).
+2. Run `flows:gen` + `pnpm check` + `./dev e2e --grep @catalog-listing`.
+3. Phase 1 report, then stop for "go".
 ## Blockers
 - None. Docker DNS failed once on an image pull; retry works.
 ## Decisions this session
