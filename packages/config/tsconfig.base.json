@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@showcase/api-contract": ["../api-contract/src/index.ts"],
+      "@showcase/mocks": ["../mocks/src/index.ts"],
+      "@showcase/ui": ["../ui/src/index.ts"]
+    }
+  }
+}

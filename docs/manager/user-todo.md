@@ -1,5 +1,5 @@
 # Only the human can do these
-- [ ] Approve or edit the invented store name and design brief
+- [x] Approve or edit the invented store name and design brief ("Hearth & Grain", approved 2026-11-17)
 - [ ] Provide or approve licensed product photos
 - [ ] Review and approve visual snapshot updates
 - [ ] Approve reduce:plan lists before any hard deletion

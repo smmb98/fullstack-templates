@@ -1,3 +1,9 @@
 packages:
   - "apps/*"
   - "packages/*"
+
+# pnpm 12 reads build approvals from the workspace file (`allowBuilds`).
+# esbuild ships a postinstall that fetches its platform binary; sharp does the same.
+allowBuilds:
+  esbuild: true
+  sharp: true

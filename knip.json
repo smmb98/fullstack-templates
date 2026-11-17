@@ -1,0 +1,44 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["eslint.config.mjs", "vitest.config.ts", "scripts/*/index.ts"],
+      "project": ["scripts/**/*.ts"]
+    },
+    "apps/shop": {
+      "entry": [
+        "src/app/**/*.{ts,tsx}",
+        "src/features/registry.ts",
+        "src/lib/api-client.ts",
+        "src/config/locale.ts",
+        "middleware.ts",
+        "next.config.ts",
+        "e2e/**/*.ts",
+        ".storybook/**/*.{ts,tsx}"
+      ],
+      "project": ["src/**/*.{ts,tsx}", "e2e/**/*.ts", ".storybook/**/*.{ts,tsx}"]
+    },
+    "packages/api-contract": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/config": {
+      "entry": ["eslint.config.mjs", "prettier.config.mjs"]
+    },
+    "packages/mocks": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.ts"]
+    },
+    "packages/ui": {
+      "entry": ["src/index.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    }
+  },
+  "ignore": ["**/*.test.ts", "**/*.stories.tsx", "**/next-env.d.ts"],
+  "ignoreBinaries": ["playwright", "storybook"],
+  "rules": {
+    "exports": "off",
+    "types": "off",
+    "duplicates": "off"
+  }
+}

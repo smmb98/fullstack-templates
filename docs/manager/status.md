@@ -1,23 +1,22 @@
 # Status (<= 30 lines, rewritten at the end of every session)
-Phase: 0 (setup) - complete, waiting for "go"    Last updated: 2026-11-17
+Phase: 1 (foundation) - in progress    Last updated: 2026-11-17
 ## Done
-- Skeleton, Docker dev image + `./dev`/`dev.ps1`, toolchain pinned (Node 26.13.1, pnpm 12.21.0).
-- OpenCode config verified; 4 third-party skills vendored and registered (skills-register.md).
-- AGENTS.md, own skills (ui-state-contract, feature-slice, reduce-template), docs tree,
-  architecture docs and runbooks written; all docs/INDEX.md paths exist.
-- Housekeeping: modern-web-guidance pinned to 1.0.1 and run only via ./dev (ADR-010);
-  gap-state-inventory substitution accepted by the human (ADR-011); roadmap and backlog updated.
+- 4.5 foundation packages: `@showcase/config` (ESLint 9 flat, prettier, tsconfigs, knip),
+  `@showcase/api-contract` (zod schemas, ApiError, endpoint registry), `@showcase/mocks`
+  (scenario engine, fixtures, Next + MSW adapters), `@showcase/ui` (tokens, Tailwind preset,
+  primitives, AsyncRegion/Error/Empty, OfflineBanner, ThemeProvider, copy).
+- `apps/shop` shell: layout with 6 next/font families, providers, api client, locale, demo
+  middleware, `/api/products` mock route, empty feature registry + flags.
+- `flows:gen` / `flows:check` / `contrast:check` implemented; INDEX header-only; 6 theme
+  sets x 5 pairs pass WCAG AA. `./dev pnpm check` green.
 ## Next 3
-1. (after "go") 4.5 foundation packages: config, api-contract, mocks, ui, shop shell.
-2. 4.6 Storybook and Playwright harness.
-3. 4.7 scripts, then 4.8 sandbox slice (`catalog-listing`).
+1. 4.6 Storybook 10 + MSW addon, Playwright desktop/mobile projects, e2e-summary script.
+2. 4.7 finish `reduce:plan`, `gen-placeholders`, `contract:gen` + unit tests.
+3. 4.8 sandbox slice `catalog-listing` (meta, flag, card, stories, matrix, offline, axe).
 ## Blockers
-- None. Docker Desktop exited twice earlier; start it if `docker info` fails.
+- None.
 ## Decisions this session
-- opencode.json uses the current `permissions` array schema; skills sourced from live repos
-  (ADR-001..009 in docs/architecture/decisions.md).
-- Store name proposed: Hearth & Grain; themes/fonts recorded in design-brief.md. Human approval
-  is in user-todo.md.
-## Notes for the next agent
-- Phase 0 gate is green. Do not start Phase 1 until the human says "go".
-- `flows:gen` does not exist yet; docs/flows/INDEX.md is a header-only placeholder.
+- Foundation pins all >= 14 days old (ADR-012); pnpm 12 build approvals via
+  `allowBuilds` in pnpm-workspace.yaml (ADR-013).
+- Workspace packages export TS source and use relative tsconfig extends so Vite/oxc and
+  Next resolve without package-subpath tsconfig lookups.

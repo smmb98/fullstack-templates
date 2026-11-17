@@ -62,3 +62,15 @@ the app; a real NestJS backend comes later and implements docs/contracts/.
 ## End of every session
 Update docs/manager/status.md (<= 30 lines: done, next 3, blockers, decisions), tick
 docs/manager/backlog.md, commit locally.
+
+## Resume protocol (when the human says "resume" or "continue")
+1. Run `git status` and `git log --oneline -5`. If there are uncommitted changes, report
+   them before touching anything.
+2. Run `docker info`. If Docker is not running, stop and tell the human.
+3. Read docs/manager/status.md, then docs/manager/bootstrap-progress.md (once bootstrap
+   is finished, use the current phase checklist in docs/manager/roadmap.md instead).
+4. Continue from the first unchecked item of the current phase. Commit after each gate and
+   update status.md after each step.
+5. Stop at the phase boundary and report in <= 10 lines. "resume" never authorises
+   starting a new phase; only "go" does.
+6. Never run /init (it would overwrite this file).

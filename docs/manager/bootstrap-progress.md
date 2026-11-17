@@ -4,7 +4,7 @@
 - [x] 4.3 OpenCode config and skills (vetted, registered)
 - [x] 4.4 AGENTS.md, own skills, docs tree
 - STOP: report Phase 0, wait for "go"
-- [ ] 4.5 Foundation packages
+- [x] 4.5 Foundation packages
 - [ ] 4.6 Storybook and Playwright harness
 - [ ] 4.7 Scripts
 - [ ] 4.8 Sandbox slice proven

@@ -56,6 +56,8 @@ D19 Final deliverable to clients is a REDUCED build: Theme Lab, Demo Controls,
 | ADR-009 | 2026-11-17 | Commit the root `pnpm-lock.yaml`. | pnpm 12 self-manages via the root lockfile; reproducible tool runs. | Ignore it (non-reproducible). |
 | ADR-010 | 2026-11-17 | Pin the modern-web-guidance CLI to npm `1.0.1` in every snippet, run it only through `./dev` (never the host), and set `DISABLE_TELEMETRY=1` on the `tools` service. | Reproducible retrieval, Docker-only rule, no telemetry; the bundle was verified against npm 1.0.1. | Leave a floating tag and run `npx` directly on demand. |
 | ADR-011 | 2026-11-17 | Accept `gap-state-inventory` as the `state-coverage` skill from `mattjmdesign/design-engineering`, renamed; human approved on 2026-11-17. | The brief's URL is dead; same author, live repo, same audit purpose. | Drop the skill and rely on `harden` only. |
+| ADR-012 | 2026-11-17 | Foundation pins: Next 16.4.4, React 19.1.10, TS 5.9.3, Tailwind 3.4.19, TanStack Query 5.105.3, zod 4.6.7, lucide-react 1.66.0, Vitest 5.1.0, ESLint 9.39.5, turbo 2.11.10. All are >= 14 days old. | Brief-mandated stack; pins respect the release-age rule and avoid TS 7 / ESLint 10 major churn. | Track latest tags (violates the 14-day rule, breaks on brand-new majors). |
+| ADR-013 | 2026-11-17 | Build approvals live in `pnpm-workspace.yaml` as `allowBuilds: { esbuild, sharp }`. | pnpm 12 no longer reads the `pnpm` field in `package.json` and fails closed on unapproved build scripts. | `pnpm approve-builds` interactively (not reproducible for agents). |
 
 ## Adding a dependency
 Before installing anything not listed in D1-D19, add one row here: what, why, and the

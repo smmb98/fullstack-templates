@@ -3,25 +3,36 @@
   "private": true,
   "version": "0.0.0",
   "packageManager": "pnpm@12.21.0",
+  "type": "module",
   "engines": {
     "node": ">=26"
   },
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "typecheck": "turbo run typecheck",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
+    "typecheck": "turbo run typecheck && tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
     "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm flows:check && pnpm contrast:check && pnpm knip",
     "e2e": "pnpm --filter @showcase/shop e2e",
-    "e2e:summary": "node scripts/e2e-summary/index.mjs",
+    "e2e:summary": "tsx scripts/e2e-summary/index.ts",
     "storybook": "pnpm --filter @showcase/shop storybook",
-    "flows:gen": "node scripts/flows-gen/index.mjs",
-    "flows:check": "node scripts/flows-check/index.mjs",
-    "contrast:check": "node scripts/contrast-check/index.mjs",
-    "reduce:plan": "node scripts/reduce-plan/index.mjs",
-    "gen-placeholders": "node scripts/gen-placeholders/index.mjs",
-    "contract:gen": "node scripts/contract-gen/index.mjs",
+    "flows:gen": "tsx scripts/flows-gen/index.ts",
+    "flows:check": "tsx scripts/flows-check/index.ts",
+    "contrast:check": "tsx scripts/contrast-check/index.ts",
+    "reduce:plan": "tsx scripts/reduce-plan/index.ts",
+    "gen-placeholders": "tsx scripts/gen-placeholders/index.ts",
+    "contract:gen": "tsx scripts/contract-gen/index.ts",
     "knip": "knip"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "eslint": "9.39.5",
+    "knip": "6.44.1",
+    "prettier": "3.9.10",
+    "tsx": "4.23.15",
+    "turbo": "2.11.10",
+    "typescript": "5.9.3",
+    "vitest": "5.1.0"
   }
 }

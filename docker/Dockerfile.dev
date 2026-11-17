@@ -17,6 +17,12 @@ ENV PNPM_HOME=/pnpm
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN mkdir -p /repo /pnpm /pnpm-store \
+  /repo/node_modules \
+  /repo/apps/shop/node_modules /repo/apps/shop/.next \
+  /repo/packages/config/node_modules \
+  /repo/packages/api-contract/node_modules \
+  /repo/packages/mocks/node_modules \
+  /repo/packages/ui/node_modules \
   && chown -R node:node /repo /pnpm /pnpm-store
 
 USER node
