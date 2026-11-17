@@ -2,7 +2,7 @@
 - [x] 4.1 Repo skeleton
 - [x] 4.2 Docker and ./dev
 - [x] 4.3 OpenCode config and skills (vetted, registered)
-- [ ] 4.4 AGENTS.md, own skills, docs tree
+- [x] 4.4 AGENTS.md, own skills, docs tree
 - STOP: report Phase 0, wait for "go"
 - [ ] 4.5 Foundation packages
 - [ ] 4.6 Storybook and Playwright harness
