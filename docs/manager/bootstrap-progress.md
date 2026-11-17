@@ -5,7 +5,7 @@
 - [x] 4.4 AGENTS.md, own skills, docs tree
 - STOP: report Phase 0, wait for "go"
 - [x] 4.5 Foundation packages
-- [ ] 4.6 Storybook and Playwright harness
+- [x] 4.6 Storybook and Playwright harness
 - [ ] 4.7 Scripts
 - [ ] 4.8 Sandbox slice proven
 - STOP: report Phase 1, wait for "go"

@@ -44,7 +44,7 @@ switch ($command) {
   }
   "shell" { docker compose run --rm tools sh }
   "e2e" {
-    $cmdline = Join-Args (@("pnpm", "--filter", "@showcase/shop", "e2e") + $rest)
+    $cmdline = Join-Args (@("npx", "--no-install", "playwright", "test") + $rest)
     docker compose run --rm --no-deps e2e sh -lc $cmdline
     $status = $LASTEXITCODE
     Clean-MountPoints

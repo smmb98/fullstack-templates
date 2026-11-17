@@ -35,7 +35,6 @@
     }
   },
   "ignore": ["**/*.test.ts", "**/*.stories.tsx", "**/next-env.d.ts"],
-  "ignoreBinaries": ["playwright", "storybook"],
   "rules": {
     "exports": "off",
     "types": "off",

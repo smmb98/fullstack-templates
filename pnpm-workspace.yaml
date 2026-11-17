@@ -7,3 +7,5 @@ packages:
 allowBuilds:
   esbuild: true
   sharp: true
+  # core-js-pure's postinstall only prints a donation banner; skip it.
+  core-js-pure: false
