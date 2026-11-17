@@ -1,6 +1,6 @@
 # Bootstrap progress (resume from the first unchecked item)
-- [ ] 4.1 Repo skeleton
-- [ ] 4.2 Docker and ./dev
+- [x] 4.1 Repo skeleton
+- [x] 4.2 Docker and ./dev
 - [ ] 4.3 OpenCode config and skills (vetted, registered)
 - [ ] 4.4 AGENTS.md, own skills, docs tree
 - STOP: report Phase 0, wait for "go"

@@ -3,18 +3,43 @@
 set -eu
 cd "$(dirname "$0")"
 
+# Docker creates empty mount-point dirs inside the bind mount for named volumes.
+# Remove them when empty so the host tree stays clean; never delete real files.
+cleanup_mountpoints() {
+  for d in node_modules apps/shop/node_modules packages/config/node_modules \
+    packages/api-contract/node_modules packages/mocks/node_modules \
+    packages/ui/node_modules apps/shop/.next; do
+    if [ -d "$d" ] && [ -z "$(ls -A "$d" 2>/dev/null)" ]; then
+      rmdir "$d" 2>/dev/null || true
+    fi
+  done
+}
+
 cmd="${1:-}"
 if [ $# -gt 0 ]; then shift; fi
 
 case "$cmd" in
   up) docker compose up -d app storybook ;;
-  down) docker compose down ;;
+  down)
+    docker compose down
+    cleanup_mountpoints
+    ;;
   shell) docker compose run --rm tools sh ;;
-  e2e) docker compose run --rm --no-deps e2e pnpm --filter @showcase/shop e2e "$@" ;;
+  e2e)
+    status=0
+    docker compose run --rm --no-deps e2e sh -lc 'exec "$@"' -- pnpm --filter @showcase/shop e2e "$@" || status=$?
+    cleanup_mountpoints
+    exit $status
+    ;;
   "")
     echo "usage: ./dev <command> ..." >&2
     echo "  up | down | shell | e2e [args] | <any command inside tools>" >&2
     exit 2
     ;;
-  *) docker compose run --rm tools "$cmd" "$@" ;;
+  *)
+    status=0
+    docker compose run --rm tools sh -lc 'exec "$@"' -- "$cmd" "$@" || status=$?
+    cleanup_mountpoints
+    exit $status
+    ;;
 esac

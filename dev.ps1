@@ -3,18 +3,63 @@
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 
-$command = if ($args.Count -gt 0) { $args[0] } else { "" }
-$rest = if ($args.Count -gt 1) { $args[1..($args.Count - 1)] } else { @() }
+function Quote-Arg([string]$value) {
+  if ($value -match '^[A-Za-z0-9_@%+=:,./-]+$') { return $value }
+  return "'" + ($value -replace "'", "'\''") + "'"
+}
+
+function Join-Args([string[]]$items) {
+  return (($items | ForEach-Object { Quote-Arg $_ }) -join ' ')
+}
+
+# Docker creates empty mount-point dirs inside the bind mount for named volumes.
+# Remove them when empty so the host tree stays clean; never delete real files.
+function Clean-MountPoints {
+  $targets = @(
+    "node_modules",
+    "apps/shop/node_modules",
+    "packages/config/node_modules",
+    "packages/api-contract/node_modules",
+    "packages/mocks/node_modules",
+    "packages/ui/node_modules",
+    "apps/shop/.next"
+  )
+  foreach ($target in $targets) {
+    $path = Join-Path $PSScriptRoot $target
+    if (Test-Path $path) {
+      $items = Get-ChildItem -Force $path -ErrorAction SilentlyContinue
+      if (-not $items) { Remove-Item $path -Force -ErrorAction SilentlyContinue }
+    }
+  }
+}
+
+$command = if ($args.Count -gt 0) { [string]$args[0] } else { "" }
+$rest = if ($args.Count -gt 1) { $args[1..($args.Count - 1)] | ForEach-Object { [string]$_ } } else { @() }
 
 switch ($command) {
   "up" { docker compose up -d app storybook }
-  "down" { docker compose down }
+  "down" {
+    docker compose down
+    Clean-MountPoints
+  }
   "shell" { docker compose run --rm tools sh }
-  "e2e" { docker compose run --rm --no-deps e2e pnpm --filter @showcase/shop e2e @rest }
+  "e2e" {
+    $cmdline = Join-Args (@("pnpm", "--filter", "@showcase/shop", "e2e") + $rest)
+    docker compose run --rm --no-deps e2e sh -lc $cmdline
+    $status = $LASTEXITCODE
+    Clean-MountPoints
+    exit $status
+  }
   "" {
     Write-Error "usage: ./dev.ps1 <command> ...  (up | down | shell | e2e [args] | <any command inside tools>)"
     exit 2
   }
-  default { docker compose run --rm tools $command @rest }
+  default {
+    $cmdline = Join-Args (@($command) + $rest)
+    docker compose run --rm tools sh -lc $cmdline
+    $status = $LASTEXITCODE
+    Clean-MountPoints
+    exit $status
+  }
 }
 exit $LASTEXITCODE
