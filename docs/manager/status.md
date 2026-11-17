@@ -5,6 +5,8 @@ Phase: 0 (setup) - complete, waiting for "go"    Last updated: 2026-11-17
 - OpenCode config verified; 4 third-party skills vendored and registered (skills-register.md).
 - AGENTS.md, own skills (ui-state-contract, feature-slice, reduce-template), docs tree,
   architecture docs and runbooks written; all docs/INDEX.md paths exist.
+- Housekeeping: modern-web-guidance pinned to 1.0.1 and run only via ./dev (ADR-010);
+  gap-state-inventory substitution accepted by the human (ADR-011); roadmap and backlog updated.
 ## Next 3
 1. (after "go") 4.5 foundation packages: config, api-contract, mocks, ui, shop shell.
 2. 4.6 Storybook and Playwright harness.

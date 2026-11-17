@@ -8,3 +8,9 @@
 - [ ] Demo #4 dashboard
 - [ ] Demo #5 portfolio hub (use landing-page-design skill, deferred)
 - [ ] NestJS backend, contract-first (spec-kit, deferred)
+- [ ] Phase 5 Client export: skill `export-client` + `scripts/export-plan`. Interview (features, theme/scheme/font, layout variants, currency, DB provider) -> client.config.json -> fresh no-history repo (frontend + api), env templates, deploy runbook -> check + e2e before handoff
+- [ ] Backend rule: each Nest module owns its entities, migrations and seed; no cross-module FKs except core users (so DB stripping = deleting modules)
+- [ ] Layout variants: 2-3 config-driven options (header style, listing density) so export can switch them
+- [ ] Phase 5 Client export: skill `export-client` + `scripts/export-plan`. Interview (features, theme/scheme/font, layout variants, currency, DB provider) -> client.config.json -> fresh no-history repo (frontend + api), env templates, deploy runbook -> check + e2e before handoff
+- [ ] Backend rule: each Nest module owns its entities, migrations and seed; no cross-module FKs except core users (so DB stripping = deleting modules)
+- [ ] Layout variants: 2-3 config-driven options (header style, listing density) so export can switch them

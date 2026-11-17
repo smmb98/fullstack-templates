@@ -3,6 +3,7 @@ name: showcase
 x-env: &env
   CI: "true"
   NEXT_TELEMETRY_DISABLED: "1"
+  DISABLE_TELEMETRY: "1"
 
 x-dev-volumes: &dev-volumes
   - .:/repo
