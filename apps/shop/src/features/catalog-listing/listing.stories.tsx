@@ -1,7 +1,8 @@
-import type { Facets, ProductListResponse } from "@fullstack-templates/api-contract";
+import type { ProductListResponse } from "@fullstack-templates/api-contract";
 import { products } from "@fullstack-templates/mocks";
 import { AsyncRegion, type RegionState } from "@fullstack-templates/ui";
 import type { Meta, StoryObj } from "@storybook/nextjs";
+import { emptyFilters } from "@/features/catalog-filters";
 import type { ListingView } from "./api";
 import { ListingFrame } from "./components/listing-frame";
 import { ListingGrid, ListingSkeleton } from "./components/listing-grid";
@@ -27,24 +28,11 @@ const missingImageData: ProductListResponse = {
   total: 1,
 };
 
-const facets: Facets = {
-  categories: [
-    { value: "Seating", label: "Seating", count: 4 },
-    { value: "Lighting", label: "Lighting", count: 3 },
-    { value: "Decor", label: "Decor", count: 3 },
-    { value: "Tableware", label: "Tableware", count: 2 },
-  ],
-  brands: [],
-  colors: [],
-  materials: [],
-};
-
 interface PreviewProps {
   state: RegionState;
   data?: ProductListResponse;
   isLarge?: boolean;
   view?: ListingView;
-  facets?: Facets;
 }
 
 function Preview({
@@ -52,23 +40,18 @@ function Preview({
   data,
   isLarge = false,
   view = "grid",
-  facets: facetData = facets,
 }: PreviewProps) {
   return (
     <ListingFrame
-      query={{ view: view === "grid" ? undefined : view }}
+      query={{ ...emptyFilters, view: view === "grid" ? undefined : view }}
       searchText=""
       isLarge={isLarge}
-      showClear
       showSort
       view={view}
-      facets={facetData}
       onSearchChange={() => undefined}
       onSearchSubmit={() => undefined}
       onSortChange={() => undefined}
-      onCategoryChange={() => undefined}
       onViewChange={() => undefined}
-      onClear={() => undefined}
     >
       <AsyncRegion
         state={state}

@@ -6,6 +6,14 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import type { ProductSort } from "@fullstack-templates/api-contract";
 import {
+  ActiveFilters,
+  CatalogFilters,
+  activeFilterCount,
+  emptyFilters,
+  removeChip,
+  type CatalogFilterState,
+} from "@/features/catalog-filters";
+import {
   fetchProducts,
   listingHref,
   listingKeys,
@@ -21,9 +29,11 @@ const SEARCH_DEBOUNCE_MS = 300;
 export function CatalogListingPage({
   initialQuery,
   sortEnabled = true,
+  filtersEnabled = true,
 }: {
   initialQuery: ListingQuery;
   sortEnabled?: boolean;
+  filtersEnabled?: boolean;
 }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -40,6 +50,18 @@ export function CatalogListingPage({
   const committedView = initialQuery.view ?? "grid";
   const [searchText, setSearchText] = useState(committedQ);
 
+  const filters: CatalogFilterState = {
+    category: committedCategory,
+    brands: initialQuery.brands,
+    colors: initialQuery.colors,
+    materials: initialQuery.materials,
+    minPrice: initialQuery.minPrice,
+    maxPrice: initialQuery.maxPrice,
+    minRating: initialQuery.minRating,
+    inStock: initialQuery.inStock,
+    onSale: initialQuery.onSale,
+  };
+
   useEffect(() => {
     setSearchText(committedQ);
   }, [committedQ]);
@@ -55,6 +77,13 @@ export function CatalogListingPage({
     [router],
   );
 
+  const base = (): ListingQuery => ({
+    ...filters,
+    q: searchText.trim() || undefined,
+    sort: committedSort,
+    view: initialQuery.view,
+  });
+
   // Large result sets need an explicit submit; small ones filter as the user types.
   const isLarge = (query.data?.total ?? 0) > LIVE_SEARCH_LIMIT;
 
@@ -62,59 +91,31 @@ export function CatalogListingPage({
     const nextQ = searchText.trim() || undefined;
     if (nextQ === (committedQ || undefined) || isLarge) return;
     const timer = setTimeout(() => {
-      commit(
-        { q: nextQ, category: committedCategory, sort: committedSort, view: initialQuery.view },
-        "replace",
-      );
+      commit({ ...base(), q: nextQ }, "replace");
     }, SEARCH_DEBOUNCE_MS);
     return () => clearTimeout(timer);
+    // base() is derived from the committed URL fields below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText, committedQ, committedCategory, committedSort, isLarge, commit, initialQuery.view]);
 
-  const hasFilters = Boolean(committedQ || committedCategory);
-  const hasResults = (query.data?.items.length ?? 1) > 0;
+  const hasFilters = activeFilterCount(filters) > 0 || Boolean(committedQ);
 
   const applySearch = () => {
-    commit(
-      {
-        q: searchText.trim() || undefined,
-        category: committedCategory,
-        sort: committedSort,
-        view: initialQuery.view,
-      },
-      "push",
-    );
+    commit(base(), "push");
   };
 
   const applySort = (sort: ProductSort) => {
-    commit(
-      {
-        q: searchText.trim() || undefined,
-        category: committedCategory,
-        sort: sort === "relevance" ? undefined : sort,
-        view: initialQuery.view,
-      },
-      "push",
-    );
+    commit({ ...base(), sort: sort === "relevance" ? undefined : sort }, "push");
   };
 
-  const applyCategory = (category: string | undefined) => {
-    commit(
-      {
-        q: searchText.trim() || undefined,
-        category,
-        sort: committedSort,
-        view: initialQuery.view,
-      },
-      "push",
-    );
+  const applyFilters = (next: CatalogFilterState) => {
+    commit({ ...next, q: searchText.trim() || undefined, sort: committedSort, view: initialQuery.view }, "push");
   };
 
   const applyView = (view: ListingView) => {
     commit(
       {
-        q: searchText.trim() || undefined,
-        category: committedCategory,
-        sort: committedSort,
+        ...base(),
         page: committedPage,
         view: view === "grid" ? undefined : view,
       },
@@ -125,10 +126,7 @@ export function CatalogListingPage({
   const applyPage = (page: number) => {
     commit(
       {
-        q: searchText.trim() || undefined,
-        category: committedCategory,
-        sort: committedSort,
-        view: committedView === "grid" ? undefined : committedView,
+        ...base(),
         page: page > 1 ? page : undefined,
       },
       "push",
@@ -137,7 +135,7 @@ export function CatalogListingPage({
 
   const clearFilters = () => {
     setSearchText("");
-    commit({ view: initialQuery.view }, "push");
+    commit(emptyFilters, "push");
   };
 
   return (
@@ -145,16 +143,31 @@ export function CatalogListingPage({
       query={initialQuery}
       searchText={searchText}
       isLarge={isLarge}
-      showClear={hasResults}
       showSort={sortEnabled}
       view={committedView}
-      facets={query.data?.facets}
       onSearchChange={setSearchText}
       onSearchSubmit={applySearch}
       onSortChange={applySort}
-      onCategoryChange={applyCategory}
       onViewChange={applyView}
-      onClear={clearFilters}
+      activeFilters={
+        filtersEnabled ? (
+          <ActiveFilters
+            filters={filters}
+            onRemove={(chip) => applyFilters(removeChip(filters, chip))}
+            onClear={clearFilters}
+          />
+        ) : null
+      }
+      filters={
+        filtersEnabled ? (
+          <CatalogFilters
+            facets={query.data?.facets}
+            value={filters}
+            onChange={applyFilters}
+            onClear={clearFilters}
+          />
+        ) : null
+      }
     >
       <AsyncRegion
         query={query}
@@ -170,10 +183,7 @@ export function CatalogListingPage({
             view={committedView}
             pageHref={(page) =>
               listingHref({
-                q: searchText.trim() || undefined,
-                category: committedCategory,
-                sort: committedSort,
-                view: committedView,
+                ...base(),
                 page,
               })
             }

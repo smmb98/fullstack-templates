@@ -268,10 +268,69 @@ export function productFacets(productsIn: Product[]): ProductListResponse["facet
       .map(([value, count]) => ({ value, label: value, count }))
       .sort((a, b) => a.label.localeCompare(b.label));
   };
+
+  const swatches: Record<string, string> = {
+    chalk: "#efe9df",
+    clay: "#b98a6f",
+    moss: "#6b7a5a",
+    natural: "#d8c7a9",
+    "natural oak": "#c9a06b",
+    walnut: "#6b4a33",
+    oat: "#e3d5bc",
+    brass: "#b08d3f",
+    cedar: "#8a5a3b",
+    terracotta: "#b45f3f",
+    "weathered teak": "#9a8668",
+    "aged steel": "#6d7377",
+    slate: "#6b7280",
+    "speckled cream": "#e8dfcc",
+  };
+
+  const categoryCounts = new Map<string, { label: string; parent: string | null; count: number }>();
+  for (const product of productsIn) {
+    const path = product.categoryPath.length > 0 ? product.categoryPath : [product.category];
+    const [top, sub] = path;
+    if (top) {
+      const current = categoryCounts.get(top) ?? { label: top, parent: null, count: 0 };
+      categoryCounts.set(top, { ...current, count: current.count + 1 });
+    }
+    if (top && sub) {
+      const current = categoryCounts.get(sub) ?? { label: sub, parent: top, count: 0 };
+      categoryCounts.set(sub, { ...current, count: current.count + 1 });
+    }
+  }
+  const categories = [...categoryCounts.entries()]
+    .map(([value, bucket]) => ({ value, label: bucket.label, parent: bucket.parent, count: bucket.count }))
+    .sort((a, b) => {
+      const aTop = a.parent ?? a.value;
+      const bTop = b.parent ?? b.value;
+      if (aTop !== bTop) return aTop.localeCompare(bTop);
+      if (a.parent === null && b.parent !== null) return -1;
+      if (a.parent !== null && b.parent === null) return 1;
+      return a.label.localeCompare(b.label);
+    });
+
+  const amounts = productsIn.map((product) => product.price.amount);
+  const price =
+    amounts.length > 0
+      ? { min: Math.min(...amounts), max: Math.max(...amounts) }
+      : { min: 0, max: 0 };
+
+  const ratings = [4, 3, 2].map((threshold) => ({
+    value: String(threshold),
+    label: `${threshold} & up`,
+    count: productsIn.filter((product) => product.rating >= threshold).length,
+  }));
+
   return {
-    categories: map(productsIn.map((p) => p.category)),
+    categories,
     brands: map(productsIn.map((p) => p.brand).filter((b): b is string => Boolean(b))),
-    colors: map(productsIn.flatMap((p) => p.colors)),
+    colors: map(productsIn.flatMap((p) => p.colors)).map((bucket) => ({
+      ...bucket,
+      swatch: swatches[bucket.value.toLowerCase()] ?? "#9ca3af",
+    })),
     materials: map(productsIn.flatMap((p) => p.materials)),
+    ratings,
+    price,
   };
 }

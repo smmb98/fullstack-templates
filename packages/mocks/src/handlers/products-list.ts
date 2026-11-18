@@ -17,8 +17,16 @@ const largeCatalog: Product[] = Array.from({ length: 512 }, (_, index) => {
   };
 });
 
+function csv(value?: string): string[] {
+  return value ? value.split(",").map((item) => item.trim()).filter(Boolean) : [];
+}
+
 function applyQuery(items: Product[], query: ProductListQuery): Product[] {
   let result = items;
+  const brands = csv(query.brand);
+  const colors = csv(query.color);
+  const materials = csv(query.material);
+
   if (query.q) {
     const needle = query.q.toLowerCase();
     result = result.filter(
@@ -28,8 +36,32 @@ function applyQuery(items: Product[], query: ProductListQuery): Product[] {
         (product.brand ?? "").toLowerCase().includes(needle),
     );
   }
-  if (query.category) result = result.filter((product) => product.category === query.category);
-  if (query.brand) result = result.filter((product) => product.brand === query.brand);
+  if (query.category) {
+    result = result.filter(
+      (product) =>
+        product.category === query.category || product.categoryPath.includes(query.category!),
+    );
+  }
+  if (brands.length > 0) result = result.filter((product) => product.brand && brands.includes(product.brand));
+  if (colors.length > 0) {
+    result = result.filter((product) => product.colors.some((color) => colors.includes(color)));
+  }
+  if (materials.length > 0) {
+    result = result.filter((product) =>
+      product.materials.some((material) => materials.includes(material)),
+    );
+  }
+  if (query.minPrice !== undefined) {
+    result = result.filter((product) => product.price.amount >= query.minPrice!);
+  }
+  if (query.maxPrice !== undefined) {
+    result = result.filter((product) => product.price.amount <= query.maxPrice!);
+  }
+  if (query.minRating !== undefined) {
+    result = result.filter((product) => product.rating >= query.minRating!);
+  }
+  if (query.inStock === "true") result = result.filter((product) => product.inStock);
+  if (query.onSale === "true") result = result.filter((product) => product.compareAtPrice !== null);
 
   switch (query.sort) {
     case "price-asc":

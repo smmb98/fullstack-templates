@@ -1,4 +1,4 @@
-import type { Facets, ProductSort } from "@fullstack-templates/api-contract";
+import type { ProductSort } from "@fullstack-templates/api-contract";
 import { Button, cn } from "@fullstack-templates/ui";
 import type { ReactNode } from "react";
 import { SortControl } from "@/features/catalog-sort";
@@ -8,47 +8,33 @@ export interface ListingFrameProps {
   query: ListingQuery;
   searchText: string;
   isLarge: boolean;
-  /** The empty state owns the clear-filters action, so the form hides its own. */
-  showClear: boolean;
   showSort: boolean;
   view: ListingView;
-  facets?: Facets;
   onSearchChange: (value: string) => void;
   onSearchSubmit: () => void;
   onSortChange: (value: ProductSort) => void;
-  onCategoryChange: (value: string | undefined) => void;
   onViewChange: (value: ListingView) => void;
-  onClear: () => void;
+  /** Sidebar filters (desktop) and drawer trigger (mobile). */
+  filters?: ReactNode;
+  /** Applied-filter chips above the results. */
+  activeFilters?: ReactNode;
   children: ReactNode;
 }
-
-const chipClass = (active: boolean) =>
-  cn(
-    "inline-flex min-h-11 items-center gap-2 rounded-full border px-3 text-sm font-medium transition-colors",
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-    active
-      ? "border-primary bg-primary text-on-primary"
-      : "border-line bg-surface text-ink hover:bg-subtle",
-  );
 
 export function ListingFrame({
   query,
   searchText,
   isLarge,
-  showClear,
   showSort,
   view,
-  facets,
   onSearchChange,
   onSearchSubmit,
   onSortChange,
-  onCategoryChange,
   onViewChange,
-  onClear,
+  filters,
+  activeFilters,
   children,
 }: ListingFrameProps) {
-  const hasFilters = Boolean(query.q || query.category);
-
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
       <header className="max-w-2xl">
@@ -71,9 +57,9 @@ export function ListingFrame({
           event.preventDefault();
           onSearchSubmit();
         }}
-        className="mt-8 flex flex-col gap-3 border-y border-line py-4 sm:flex-row sm:items-end"
+        className="mt-8 flex flex-col gap-3 border-y border-line py-4 sm:flex-row sm:flex-wrap sm:items-end"
       >
-        <div className="flex-1">
+        <div className="flex-1 sm:min-w-56">
           <label htmlFor="catalog-q" className="mb-1 block text-sm font-medium text-ink">
             Search the collection
           </label>
@@ -93,9 +79,7 @@ export function ListingFrame({
             </p>
           ) : null}
         </div>
-        {showSort ? (
-          <SortControl value={query.sort} onChange={onSortChange} />
-        ) : null}
+        {showSort ? <SortControl value={query.sort} onChange={onSortChange} /> : null}
         <div>
           <span id="catalog-view-label" className="mb-1 block text-sm font-medium text-ink">
             Layout
@@ -125,51 +109,14 @@ export function ListingFrame({
           </div>
         </div>
         {isLarge ? <Button type="submit">Search</Button> : null}
-        {hasFilters && showClear ? (
-          <button
-            type="button"
-            onClick={onClear}
-            className="inline-flex min-h-11 items-center justify-center rounded-md px-3 text-sm font-medium text-ink underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-          >
-            Clear filters
-          </button>
-        ) : null}
       </form>
 
-      {facets && facets.categories.length > 0 ? (
-        <div
-          role="group"
-          aria-label="Filter by category"
-          className="mt-4 flex flex-wrap items-center gap-2 border-b border-line pb-4"
-        >
-          <span className="mr-1 text-sm font-medium text-ink">Category</span>
-          <button
-            type="button"
-            aria-pressed={!query.category}
-            onClick={() => onCategoryChange(undefined)}
-            className={chipClass(!query.category)}
-          >
-            All
-          </button>
-          {facets.categories.map((category) => {
-            const active = query.category === category.value;
-            return (
-              <button
-                key={category.value}
-                type="button"
-                aria-pressed={active}
-                onClick={() => onCategoryChange(active ? undefined : category.value)}
-                className={chipClass(active)}
-              >
-                {category.label}
-                <span className="text-xs opacity-70">{category.count}</span>
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
+      {activeFilters}
 
-      <div className="mt-8">{children}</div>
+      <div className="mt-6 grid gap-8 lg:grid-cols-[17rem_1fr]">
+        <div>{filters}</div>
+        <div className="min-w-0">{children}</div>
+      </div>
     </div>
   );
 }

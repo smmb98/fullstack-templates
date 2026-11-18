@@ -88,17 +88,26 @@ test.describe("catalog listing behaviour @catalog-listing", () => {
     await expect(page.getByRole("heading", { name: "Brass Candle Holder" }).first()).toBeVisible();
   });
 
-  test("category chips filter the grid and reset @catalog-listing", async ({ page }) => {
+  test("category filters the grid and resets @catalog-listing", async ({ page }) => {
     await gotoWithScenario(page, "/products", "ok");
     await expectState(region(page), "ready");
 
-    await page.getByRole("button", { name: /^Decor/ }).click();
+    const trigger = page.getByRole("button", { name: /^Filters/ });
+    if (await trigger.isVisible()) await trigger.click();
+    const panel = page.locator('[data-testid="filters-panel"]:visible').first();
+    await panel.getByRole("button", { name: /^Decor/ }).click();
+    const showResults = page.getByRole("button", { name: "Show results" });
+    if (await showResults.isVisible()) await showResults.click();
+
     await expect(page).toHaveURL(/[?&]category=Decor/);
     await expectState(region(page), "ready");
     await expect(page.getByRole("heading", { name: "Hand-Thrown Vase" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Alder Lounge Chair" })).toHaveCount(0);
 
-    await page.getByRole("button", { name: "All" }).click();
+    await page
+      .getByRole("group", { name: "Applied filters" })
+      .getByRole("button", { name: /^Decor/ })
+      .click();
     await expect(page).not.toHaveURL(/[?&]category=/);
     await expect(page.getByRole("heading", { name: "Alder Lounge Chair" })).toBeVisible();
   });

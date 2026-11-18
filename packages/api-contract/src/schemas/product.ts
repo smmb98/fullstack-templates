@@ -39,7 +39,17 @@ export const productListQuerySchema = z.object({
   sort: productSortSchema.default("relevance"),
   q: z.string().trim().max(120).optional(),
   category: z.string().trim().max(80).optional(),
-  brand: z.string().trim().max(80).optional(),
+  /** Comma-separated brand values. */
+  brand: z.string().trim().max(400).optional(),
+  minPrice: z.coerce.number().int().nonnegative().optional(),
+  maxPrice: z.coerce.number().int().nonnegative().optional(),
+  minRating: z.coerce.number().min(0).max(5).optional(),
+  /** Comma-separated colour values. */
+  color: z.string().trim().max(400).optional(),
+  /** Comma-separated material values. */
+  material: z.string().trim().max(400).optional(),
+  inStock: z.enum(["true", "false"]).optional(),
+  onSale: z.enum(["true", "false"]).optional(),
 });
 export type ProductListQuery = z.infer<typeof productListQuerySchema>;
 

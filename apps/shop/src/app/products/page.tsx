@@ -4,6 +4,7 @@ import {
   type ListingQuery,
   type ListingView,
 } from "@/features/catalog-listing";
+import { emptyFilters, readCatalogFilters } from "@/features/catalog-filters";
 import { readSortParam } from "@/features/catalog-sort";
 import { isFeatureEnabled } from "@/features/flags";
 
@@ -32,14 +33,22 @@ export default async function ProductsPage({
   if (!isFeatureEnabled("catalogListing")) notFound();
 
   const sortEnabled = isFeatureEnabled("catalogSort");
+  const filtersEnabled = isFeatureEnabled("catalogFilters");
   const params = await searchParams;
+  const filters = filtersEnabled ? readCatalogFilters(params) : emptyFilters;
   const query: ListingQuery = {
+    ...filters,
     q: first(params.q)?.trim() || undefined,
-    category: first(params.category)?.trim() || undefined,
     sort: sortEnabled ? readSortParam(first(params.sort)) : undefined,
     page: readPage(first(params.page)),
     view: readView(first(params.view)),
   };
 
-  return <CatalogListingPage initialQuery={query} sortEnabled={sortEnabled} />;
+  return (
+    <CatalogListingPage
+      initialQuery={query}
+      sortEnabled={sortEnabled}
+      filtersEnabled={filtersEnabled}
+    />
+  );
 }

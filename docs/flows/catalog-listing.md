@@ -1,15 +1,15 @@
 # catalog-listing: Catalog listing
 ## Purpose
-Browse the catalog, search, filter by category, sort, switch grid/list and page through results
-without losing URL state or flashing a full-page reload.
+Browse, search, filter, sort, switch grid/list and page through results with URL state intact.
 ## User flow
 1. Open `/products` from the header, the home hero or the "New arrivals" link.
-2. The page shows search, sort, layout toggle, category chips and a grid or list of products.
+2. The page shows search, sort, layout toggle, a filter sidebar (drawer on mobile) and a grid
+   or list of products.
 3. Typing filters live after a short debounce and updates `?q=`; on a large result set the
    Search button stays visible and only submits on click/Enter.
-4. Category chips toggle `?category=`; sort writes `?sort=`; the layout toggle writes `?view=list`
-   only when it is not the default.
-5. Pagination writes `?page=` and keeps `q`, `category`, `sort` and `view`; changing any filter
+4. The `catalog-filters` slice writes category, brand, price, rating, stock, sale, colour and
+   material; sort writes `?sort=`; the layout toggle writes `?view=list` when not the default.
+5. Pagination writes `?page=` and keeps search, filters, sort and view; changing any filter
    returns to page 1. Pager links are real anchors, so they work without JavaScript.
 6. Empty results offer "Clear filters"; errors offer "Try again" (rate limits count down).
 ## UX rules
@@ -28,7 +28,7 @@ without losing URL state or flashing a full-page reload.
 | large | ready | 512 products, pager and Search button |
 | flaky | ready | first request 503, retry succeeds |
 | partial | partial | data shown with a "some sections" notice |
-| empty + `q` | empty:no-results | "Clear filters" clears `q` |
+| empty + `q` | empty:no-results | "Clear filters" clears `q` and every filter |
 | empty, no filters | empty:first-use | "Browse everything" |
 | error-500 / error-422 | error:http | retry button |
 | error-401 | error:unauthorized | sign-in copy |
@@ -40,8 +40,8 @@ without losing URL state or flashing a full-page reload.
 ## Edge cases
 - A product with no images keeps the 4/3 box and shows "Image coming soon".
 - A photo that fails to load falls back to the same labelled placeholder.
-- The empty grid owns the "Clear filters" action: the form hides its copy while the grid is
-  empty, so one control never carries the same name twice.
+- The empty grid owns the single "Clear filters" action; the sidebar only offers "Clear all"
+  when something is applied, so the page never shows the same action twice in one view.
 - Long titles and descriptions wrap; prices stay on one line.
 - `slow` shows the skeleton first, then ready: never asserted as a steady state.
 - Quick add to cart arrives with the `cart` slice (the card will then depend on `cart`).
@@ -49,11 +49,11 @@ without losing URL state or flashing a full-page reload.
 Tag @catalog-listing; spec `apps/shop/e2e/catalog-listing.spec.ts`; stories
 `apps/shop/src/features/catalog-listing/listing.stories.tsx` (one story per state,
 plus "missing image", "list view" and "large collection"). Covers live search without reload,
-large-set submit, category chips, URL-synced pagination, filter resetting the page, the layout
-toggle (keyboard) and persistence, a decoded vase photo, the placeholder fallback, offline
-recovery and axe on ready + empty + error.
+large-set submit, category filtering through the filter panel, URL-synced pagination, filter
+reset, the layout toggle (keyboard) and persistence, a decoded vase photo, the placeholder,
+offline recovery and axe on ready + empty + error.
 ## Dependencies
-dependsOn: catalog-sort.   Endpoints: products.list.   Flag: catalogListing.
+dependsOn: catalog-sort, catalog-filters.   Endpoints: products.list.   Flag: catalogListing.
 ## Reduction notes
 Referenced by the header link, the home hero buttons and `layout.tsx` footer copy.
 Removing the slice means deleting the flag, `/products`, the nav links and this card.

@@ -1,4 +1,5 @@
 {
   "catalogListing": true,
-  "catalogSort": true
+  "catalogSort": true,
+  "catalogFilters": true
 }
