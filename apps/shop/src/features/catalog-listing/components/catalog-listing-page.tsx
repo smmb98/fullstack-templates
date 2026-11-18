@@ -5,7 +5,13 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import type { ProductSort } from "@fullstack-templates/api-contract";
-import { fetchProducts, listingHref, listingKeys, type ListingQuery } from "../api";
+import {
+  fetchProducts,
+  listingHref,
+  listingKeys,
+  type ListingQuery,
+  type ListingView,
+} from "../api";
 import { ListingFrame } from "./listing-frame";
 import { ListingGrid, ListingSkeleton } from "./listing-grid";
 
@@ -24,6 +30,8 @@ export function CatalogListingPage({ initialQuery }: { initialQuery: ListingQuer
   const committedQ = initialQuery.q ?? "";
   const committedCategory = initialQuery.category;
   const committedSort = initialQuery.sort;
+  const committedPage = initialQuery.page ?? 1;
+  const committedView = initialQuery.view ?? "grid";
   const [searchText, setSearchText] = useState(committedQ);
 
   useEffect(() => {
@@ -49,19 +57,24 @@ export function CatalogListingPage({ initialQuery }: { initialQuery: ListingQuer
     if (nextQ === (committedQ || undefined) || isLarge) return;
     const timer = setTimeout(() => {
       commit(
-        { q: nextQ, category: committedCategory, sort: committedSort },
+        { q: nextQ, category: committedCategory, sort: committedSort, view: initialQuery.view },
         "replace",
       );
     }, SEARCH_DEBOUNCE_MS);
     return () => clearTimeout(timer);
-  }, [searchText, committedQ, committedCategory, committedSort, isLarge, commit]);
+  }, [searchText, committedQ, committedCategory, committedSort, isLarge, commit, initialQuery.view]);
 
   const hasFilters = Boolean(committedQ || committedCategory);
   const hasResults = (query.data?.items.length ?? 1) > 0;
 
   const applySearch = () => {
     commit(
-      { q: searchText.trim() || undefined, category: committedCategory, sort: committedSort },
+      {
+        q: searchText.trim() || undefined,
+        category: committedCategory,
+        sort: committedSort,
+        view: initialQuery.view,
+      },
       "push",
     );
   };
@@ -72,6 +85,7 @@ export function CatalogListingPage({ initialQuery }: { initialQuery: ListingQuer
         q: searchText.trim() || undefined,
         category: committedCategory,
         sort: sort === "relevance" ? undefined : sort,
+        view: initialQuery.view,
       },
       "push",
     );
@@ -79,14 +93,45 @@ export function CatalogListingPage({ initialQuery }: { initialQuery: ListingQuer
 
   const applyCategory = (category: string | undefined) => {
     commit(
-      { q: searchText.trim() || undefined, category, sort: committedSort },
+      {
+        q: searchText.trim() || undefined,
+        category,
+        sort: committedSort,
+        view: initialQuery.view,
+      },
+      "push",
+    );
+  };
+
+  const applyView = (view: ListingView) => {
+    commit(
+      {
+        q: searchText.trim() || undefined,
+        category: committedCategory,
+        sort: committedSort,
+        page: committedPage,
+        view: view === "grid" ? undefined : view,
+      },
+      "replace",
+    );
+  };
+
+  const applyPage = (page: number) => {
+    commit(
+      {
+        q: searchText.trim() || undefined,
+        category: committedCategory,
+        sort: committedSort,
+        view: committedView === "grid" ? undefined : committedView,
+        page: page > 1 ? page : undefined,
+      },
       "push",
     );
   };
 
   const clearFilters = () => {
     setSearchText("");
-    commit({}, "push");
+    commit({ view: initialQuery.view }, "push");
   };
 
   return (
@@ -95,22 +140,39 @@ export function CatalogListingPage({ initialQuery }: { initialQuery: ListingQuer
       searchText={searchText}
       isLarge={isLarge}
       showClear={hasResults}
+      view={committedView}
       facets={query.data?.facets}
       onSearchChange={setSearchText}
       onSearchSubmit={applySearch}
       onSortChange={applySort}
       onCategoryChange={applyCategory}
+      onViewChange={applyView}
       onClear={clearFilters}
     >
       <AsyncRegion
         query={query}
         testId="region-catalog-listing"
-        skeleton={<ListingSkeleton />}
+        skeleton={<ListingSkeleton view={committedView} />}
         isEmpty={(data) => data.items.length === 0}
         emptyVariant={hasFilters ? "no-results" : "first-use"}
         onEmptyAction={clearFilters}
       >
-        {(data) => <ListingGrid data={data} />}
+        {(data) => (
+          <ListingGrid
+            data={data}
+            view={committedView}
+            pageHref={(page) =>
+              listingHref({
+                q: searchText.trim() || undefined,
+                category: committedCategory,
+                sort: committedSort,
+                view: committedView,
+                page,
+              })
+            }
+            onPageChange={applyPage}
+          />
+        )}
       </AsyncRegion>
     </ListingFrame>
   );

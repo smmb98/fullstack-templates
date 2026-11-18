@@ -1,8 +1,23 @@
-import type { ProductListQuery, ProductListResponse } from "@fullstack-templates/api-contract";
+import type {
+  Product,
+  ProductListQuery,
+  ProductListResponse,
+} from "@fullstack-templates/api-contract";
 import { productFacets, products } from "../fixtures/products";
 import { DEFAULT_LATENCY_MS, RATE_LIMIT_SECONDS, type MockHandler, type MockResult } from "../types";
 
-function applyQuery(items: typeof products, query: ProductListQuery) {
+/** Deterministic 512-item catalog so pagination has something to page through. */
+const largeCatalog: Product[] = Array.from({ length: 512 }, (_, index) => {
+  const base = products[index % products.length];
+  return {
+    ...base,
+    id: `${base.id}-large-${index + 1}`,
+    slug: `${base.slug}-large-${index + 1}`,
+    title: `${base.title} · No. ${index + 1}`,
+  };
+});
+
+function applyQuery(items: Product[], query: ProductListQuery): Product[] {
   let result = items;
   if (query.q) {
     const needle = query.q.toLowerCase();
@@ -37,7 +52,8 @@ function applyQuery(items: typeof products, query: ProductListQuery) {
 
 export const productsListHandler: MockHandler = (ctx): MockResult => {
   const query = ctx.query as unknown as ProductListQuery;
-  const filtered = applyQuery(products, query);
+  const source = ctx.scenario === "large" ? largeCatalog : products;
+  const filtered = applyQuery(source, query);
   const page = query.page ?? 1;
   const pageSize = query.pageSize ?? 12;
   const start = (page - 1) * pageSize;
@@ -90,10 +106,7 @@ export const productsListHandler: MockHandler = (ctx): MockResult => {
     case "partial":
       return { status: 200, body: okBody({ partial: true }) };
     case "large":
-      return {
-        status: 200,
-        body: okBody({ items: filtered.slice(0, Math.max(pageSize, 12)), total: 512 }),
-      };
+      return { status: 200, body: okBody() };
     case "bad-json":
       return {
         status: 200,

@@ -1,7 +1,7 @@
 import type { Facets, ProductSort } from "@fullstack-templates/api-contract";
 import { Button, cn } from "@fullstack-templates/ui";
 import type { ReactNode } from "react";
-import type { ListingQuery } from "../api";
+import type { ListingQuery, ListingView } from "../api";
 
 const sortOptions = [
   { value: "relevance", label: "Most relevant" },
@@ -17,11 +17,13 @@ export interface ListingFrameProps {
   isLarge: boolean;
   /** The empty state owns the clear-filters action, so the form hides its own. */
   showClear: boolean;
+  view: ListingView;
   facets?: Facets;
   onSearchChange: (value: string) => void;
   onSearchSubmit: () => void;
   onSortChange: (value: ProductSort) => void;
   onCategoryChange: (value: string | undefined) => void;
+  onViewChange: (value: ListingView) => void;
   onClear: () => void;
   children: ReactNode;
 }
@@ -40,11 +42,13 @@ export function ListingFrame({
   searchText,
   isLarge,
   showClear,
+  view,
   facets,
   onSearchChange,
   onSearchSubmit,
   onSortChange,
   onCategoryChange,
+  onViewChange,
   onClear,
   children,
 }: ListingFrameProps) {
@@ -111,6 +115,34 @@ export function ListingFrame({
               </option>
             ))}
           </select>
+        </div>
+        <div>
+          <span id="catalog-view-label" className="mb-1 block text-sm font-medium text-ink">
+            Layout
+          </span>
+          <div
+            role="group"
+            aria-labelledby="catalog-view-label"
+            className="flex gap-1 rounded-md border border-line bg-surface p-1"
+          >
+            {(["grid", "list"] as const).map((option) => (
+              <button
+                key={option}
+                type="button"
+                aria-pressed={view === option}
+                onClick={() => onViewChange(option)}
+                className={cn(
+                  "min-h-11 min-w-16 rounded px-3 text-sm font-medium capitalize transition-colors",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+                  view === option
+                    ? "bg-primary text-on-primary"
+                    : "text-ink hover:bg-subtle",
+                )}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
         </div>
         {isLarge ? <Button type="submit">Search</Button> : null}
         {hasFilters && showClear ? (

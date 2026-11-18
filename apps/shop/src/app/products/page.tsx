@@ -1,5 +1,9 @@
 import { notFound } from "next/navigation";
-import { CatalogListingPage, type ListingQuery } from "@/features/catalog-listing";
+import {
+  CatalogListingPage,
+  type ListingQuery,
+  type ListingView,
+} from "@/features/catalog-listing";
 import { isFeatureEnabled } from "@/features/flags";
 
 export const metadata = {
@@ -25,6 +29,15 @@ function readSort(value: string | undefined): Sort | undefined {
   return sortValues.includes(value as Sort) ? (value as Sort) : undefined;
 }
 
+function readPage(value: string | undefined): number | undefined {
+  const page = Number(value);
+  return Number.isInteger(page) && page > 1 ? page : undefined;
+}
+
+function readView(value: string | undefined): ListingView | undefined {
+  return value === "list" ? "list" : undefined;
+}
+
 export default async function ProductsPage({
   searchParams,
 }: {
@@ -37,6 +50,8 @@ export default async function ProductsPage({
     q: first(params.q)?.trim() || undefined,
     category: first(params.category)?.trim() || undefined,
     sort: readSort(first(params.sort)),
+    page: readPage(first(params.page)),
+    view: readView(first(params.view)),
   };
 
   return <CatalogListingPage initialQuery={query} />;

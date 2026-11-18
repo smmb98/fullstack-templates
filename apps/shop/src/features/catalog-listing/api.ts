@@ -2,12 +2,15 @@ import type { ProductListResponse, ProductSort } from "@fullstack-templates/api-
 import { productsListEndpoint } from "@fullstack-templates/api-contract";
 import { apiRequest } from "@/lib/api-client";
 
+export type ListingView = "grid" | "list";
+
 export interface ListingQuery {
   q?: string;
   sort?: ProductSort;
   category?: string;
   page?: number;
   pageSize?: number;
+  view?: ListingView;
 }
 
 export const listingKeys = {
@@ -27,6 +30,8 @@ export function listingHref(query: ListingQuery): string {
   if (query.q) params.set("q", query.q);
   if (query.category) params.set("category", query.category);
   if (query.sort && query.sort !== "relevance") params.set("sort", query.sort);
+  if (query.view && query.view !== "grid") params.set("view", query.view);
+  if (query.page && query.page > 1) params.set("page", String(query.page));
   const search = params.toString();
   return search ? `/products?${search}` : "/products";
 }

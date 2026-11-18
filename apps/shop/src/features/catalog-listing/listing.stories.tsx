@@ -2,17 +2,15 @@ import type { Facets, ProductListResponse } from "@fullstack-templates/api-contr
 import { products } from "@fullstack-templates/mocks";
 import { AsyncRegion, type RegionState } from "@fullstack-templates/ui";
 import type { Meta, StoryObj } from "@storybook/nextjs";
-import type { ListingQuery } from "./api";
+import type { ListingView } from "./api";
 import { ListingFrame } from "./components/listing-frame";
 import { ListingGrid, ListingSkeleton } from "./components/listing-grid";
-
-const query: ListingQuery = {};
 
 const readyData: ProductListResponse = {
   items: products.slice(0, 6),
   page: 1,
   pageSize: 6,
-  total: products.length,
+  total: 6,
 };
 
 const emptyData: ProductListResponse = {
@@ -45,30 +43,39 @@ interface PreviewProps {
   state: RegionState;
   data?: ProductListResponse;
   isLarge?: boolean;
+  view?: ListingView;
   facets?: Facets;
 }
 
-function Preview({ state, data, isLarge = false, facets: facetData = facets }: PreviewProps) {
+function Preview({
+  state,
+  data,
+  isLarge = false,
+  view = "grid",
+  facets: facetData = facets,
+}: PreviewProps) {
   return (
     <ListingFrame
-      query={query}
+      query={{ view: view === "grid" ? undefined : view }}
       searchText=""
       isLarge={isLarge}
       showClear
+      view={view}
       facets={facetData}
       onSearchChange={() => undefined}
       onSearchSubmit={() => undefined}
       onSortChange={() => undefined}
       onCategoryChange={() => undefined}
+      onViewChange={() => undefined}
       onClear={() => undefined}
     >
       <AsyncRegion
         state={state}
         data={data}
         testId="region-catalog-listing"
-        skeleton={<ListingSkeleton />}
+        skeleton={<ListingSkeleton view={view} />}
       >
-        {(response) => <ListingGrid data={response} />}
+        {(response) => <ListingGrid data={response} view={view} />}
       </AsyncRegion>
     </ListingFrame>
   );
@@ -102,15 +109,14 @@ export const MissingImage: Story = {
   render: () => <Preview state="ready" data={missingImageData} />,
 };
 
+export const ListView: Story = {
+  name: "list view",
+  render: () => <Preview state="ready" data={readyData} view="list" />,
+};
+
 export const LargeCollection: Story = {
   name: "large collection",
-  render: () => (
-    <Preview
-      state="ready"
-      isLarge
-      data={{ ...readyData, total: 512 }}
-    />
-  ),
+  render: () => <Preview state="ready" isLarge data={{ ...readyData, total: 512 }} />,
 };
 
 export const EmptyFirstUse: Story = {

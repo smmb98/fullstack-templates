@@ -85,7 +85,7 @@ test.describe("catalog listing behaviour @catalog-listing", () => {
     await searchButton.click();
     await expect(page).toHaveURL(/[?&]q=candle/);
     await expectState(region(page), "ready");
-    await expect(page.getByRole("heading", { name: "Brass Candle Holder" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Brass Candle Holder" }).first()).toBeVisible();
   });
 
   test("category chips filter the grid and reset @catalog-listing", async ({ page }) => {
@@ -147,6 +147,69 @@ test.describe("catalog listing behaviour @catalog-listing", () => {
   test("the ready collection is axe clean @catalog-listing", async ({ page }) => {
     await gotoWithScenario(page, "/products", "ok");
     await expectState(region(page), "ready");
+    await expectAxeClean(page);
+  });
+
+  test("pagination is URL-synced and survives a reload @catalog-listing", async ({ page }) => {
+    await gotoWithScenario(page, "/products", "large");
+    await expectState(region(page), "ready");
+    await expect(page.getByRole("heading", { name: /No\. 1$/ })).toBeVisible();
+
+    await page.getByRole("link", { name: "Next" }).click();
+    await expect(page).toHaveURL(/[?&]page=2/);
+    await expectState(region(page), "ready");
+    await expect(page.getByRole("navigation", { name: "Pagination" })).toContainText("Page 2 of");
+    await expect(page.getByRole("heading", { name: /No\. 13$/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Page 2" })).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("link", { name: "Previous" })).toBeVisible();
+
+    await page.reload();
+    await expectState(region(page), "ready");
+    await expect(page.getByRole("heading", { name: /No\. 13$/ })).toBeVisible();
+  });
+
+  test("changing a filter resets the page to the first @catalog-listing", async ({ page }) => {
+    await gotoWithScenario(page, "/products?page=2", "large");
+    await expectState(region(page), "ready");
+    await expect(page).toHaveURL(/[?&]page=2/);
+
+    await page.getByLabel("Search the collection").fill("candle");
+    await page.getByRole("button", { name: "Search" }).click();
+
+    await expect(page).toHaveURL(/[?&]q=candle/);
+    await expect(page).not.toHaveURL(/[?&]page=/);
+    await expect(page.getByRole("navigation", { name: "Pagination" })).toContainText("Page 1 of");
+  });
+
+  test("the layout toggle switches to list view and persists @catalog-listing", async ({ page }) => {
+    await gotoWithScenario(page, "/products", "ok");
+    await expectState(region(page), "ready");
+    const results = page.getByTestId("region-catalog-listing").locator("[data-view]");
+    await expect(results).toHaveAttribute("data-view", "grid");
+
+    const listButton = page.getByRole("button", { name: "List" });
+    await listButton.focus();
+    await page.keyboard.press("Enter");
+
+    await expect(page).toHaveURL(/[?&]view=list/);
+    await expect(results).toHaveAttribute("data-view", "list");
+    await expect(listButton).toHaveAttribute("aria-pressed", "true");
+
+    await page.reload();
+    await expectState(region(page), "ready");
+    await expect(page.getByTestId("region-catalog-listing").locator("[data-view]")).toHaveAttribute(
+      "data-view",
+      "list",
+    );
+  });
+
+  test("empty and error states are axe clean @catalog-listing", async ({ page }) => {
+    await gotoWithScenario(page, "/products?q=zzz", "empty");
+    await expectState(region(page), "empty:no-results");
+    await expectAxeClean(page);
+
+    await gotoWithScenario(page, "/products", "error-500");
+    await expectState(region(page), "error:http");
     await expectAxeClean(page);
   });
 });
