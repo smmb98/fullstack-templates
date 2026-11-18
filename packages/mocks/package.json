@@ -1,5 +1,5 @@
 {
-  "name": "@showcase/mocks",
+  "name": "@fullstack-templates/mocks",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@showcase/api-contract": "workspace:*",
+    "@fullstack-templates/api-contract": "workspace:*",
     "msw": "3.0.3"
   },
   "devDependencies": {

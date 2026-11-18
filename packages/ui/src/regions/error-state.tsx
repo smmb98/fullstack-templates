@@ -1,6 +1,6 @@
 "use client";
 
-import type { ApiErrorKind } from "@showcase/api-contract";
+import type { ApiErrorKind } from "@fullstack-templates/api-contract";
 import { useEffect, useState } from "react";
 import { errorCopy } from "../copy/states";
 import { Button } from "../primitives/button";

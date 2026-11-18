@@ -205,13 +205,13 @@ importers:
 
   apps/shop:
     dependencies:
-      '@showcase/api-contract':
+      '@fullstack-templates/api-contract':
         specifier: workspace:*
         version: link:../../packages/api-contract
-      '@showcase/mocks':
+      '@fullstack-templates/mocks':
         specifier: workspace:*
         version: link:../../packages/mocks
-      '@showcase/ui':
+      '@fullstack-templates/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@tanstack/react-query':
@@ -303,7 +303,7 @@ importers:
 
   packages/mocks:
     dependencies:
-      '@showcase/api-contract':
+      '@fullstack-templates/api-contract':
         specifier: workspace:*
         version: link:../api-contract
       msw:
@@ -316,7 +316,7 @@ importers:
 
   packages/ui:
     dependencies:
-      '@showcase/api-contract':
+      '@fullstack-templates/api-contract':
         specifier: workspace:*
         version: link:../api-contract
       '@tanstack/react-query':

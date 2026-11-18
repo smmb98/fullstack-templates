@@ -1,5 +1,5 @@
 {
-  "name": "@showcase/shop",
+  "name": "@fullstack-templates/shop",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -12,9 +12,9 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@showcase/api-contract": "workspace:*",
-    "@showcase/mocks": "workspace:*",
-    "@showcase/ui": "workspace:*",
+    "@fullstack-templates/api-contract": "workspace:*",
+    "@fullstack-templates/mocks": "workspace:*",
+    "@fullstack-templates/ui": "workspace:*",
     "@tanstack/react-query": "5.105.3",
     "next": "16.4.4",
     "react": "19.1.10",

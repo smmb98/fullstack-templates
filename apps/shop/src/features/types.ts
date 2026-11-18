@@ -1,4 +1,4 @@
-import type { RegionState } from "@showcase/ui";
+import type { RegionState } from "@fullstack-templates/ui";
 
 export interface FeatureNav {
   label: string;

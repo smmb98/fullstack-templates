@@ -1,5 +1,5 @@
 {
-  "name": "@showcase/ui",
+  "name": "@fullstack-templates/ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -14,7 +14,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@showcase/api-contract": "workspace:*",
+    "@fullstack-templates/api-contract": "workspace:*",
     "@tanstack/react-query": "5.105.3",
     "lucide-react": "1.66.0",
     "react": "19.1.10"

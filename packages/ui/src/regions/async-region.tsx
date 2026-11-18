@@ -1,6 +1,6 @@
 "use client";
 
-import { ApiError, type ApiErrorKind } from "@showcase/api-contract";
+import { ApiError, type ApiErrorKind } from "@fullstack-templates/api-contract";
 import type { UseQueryResult } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 import type { EmptyVariant } from "../copy/states";

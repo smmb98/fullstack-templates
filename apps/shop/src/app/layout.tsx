@@ -1,10 +1,10 @@
-import { OfflineBanner, themeInitScript, ThemeProvider } from "@showcase/ui";
+import { OfflineBanner, themeInitScript, ThemeProvider } from "@fullstack-templates/ui";
 import type { Metadata } from "next";
 import { Fraunces, Inter, Nunito, Open_Sans, Outfit, Source_Sans_3 } from "next/font/google";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Providers } from "./providers";
-import "@showcase/ui/tokens.css";
+import "@fullstack-templates/ui/tokens.css";
 import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit", display: "swap" });

@@ -26,11 +26,11 @@ export async function goOnline(context: BrowserContext): Promise<void> {
 
 /** Simulates the Demo Controls "offline" toggle, which makes the api client throw. */
 export async function simulateOffline(page: Page): Promise<void> {
-  await page.evaluate(() => window.localStorage.setItem("showcase-simulate-offline", "1"));
+  await page.evaluate(() => window.localStorage.setItem("fullstack-templates-simulate-offline", "1"));
 }
 
 export async function stopSimulatingOffline(page: Page): Promise<void> {
-  await page.evaluate(() => window.localStorage.removeItem("showcase-simulate-offline"));
+  await page.evaluate(() => window.localStorage.removeItem("fullstack-templates-simulate-offline"));
 }
 
 export async function expectAxeClean(page: Page): Promise<void> {

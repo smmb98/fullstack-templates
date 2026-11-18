@@ -4,7 +4,7 @@ import {
   type AnyEndpoint,
   type EndpointInput,
   type EndpointResponse,
-} from "@showcase/api-contract";
+} from "@fullstack-templates/api-contract";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/api";
 const DEFAULT_TIMEOUT_MS = 10_000;
@@ -22,7 +22,7 @@ function isErrorEnvelope(value: unknown): value is ErrorEnvelope {
 
 function simulateOffline(): boolean {
   if (typeof window === "undefined") return false;
-  return window.localStorage.getItem("showcase-simulate-offline") === "1";
+  return window.localStorage.getItem("fullstack-templates-simulate-offline") === "1";
 }
 
 function makeRequestId(): string {

@@ -1,4 +1,4 @@
-import { productsListEndpoint } from "@showcase/api-contract";
+import { productsListEndpoint } from "@fullstack-templates/api-contract";
 import { executeMock } from "./engine";
 import { productsListHandler } from "./handlers/products-list";
 

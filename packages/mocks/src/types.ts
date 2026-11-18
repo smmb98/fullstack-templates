@@ -1,4 +1,4 @@
-import type { ScenarioName } from "@showcase/api-contract";
+import type { ScenarioName } from "@fullstack-templates/api-contract";
 
 export interface MockContext {
   scenario: ScenarioName;

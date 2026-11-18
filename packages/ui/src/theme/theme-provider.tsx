@@ -4,9 +4,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from "react";
 
 export const themeStorageKeys = {
-  theme: "showcase-theme",
-  scheme: "showcase-scheme",
-  font: "showcase-font",
+  theme: "fullstack-templates-theme",
+  scheme: "fullstack-templates-scheme",
+  font: "fullstack-templates-font",
 } as const;
 
 export type ThemeName = "ink" | "sand" | "forest";

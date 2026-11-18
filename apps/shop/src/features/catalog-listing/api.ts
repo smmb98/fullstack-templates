@@ -1,5 +1,5 @@
-import type { ProductListResponse, ProductSort } from "@showcase/api-contract";
-import { productsListEndpoint } from "@showcase/api-contract";
+import type { ProductListResponse, ProductSort } from "@fullstack-templates/api-contract";
+import { productsListEndpoint } from "@fullstack-templates/api-contract";
 import { apiRequest } from "@/lib/api-client";
 
 export interface ListingQuery {

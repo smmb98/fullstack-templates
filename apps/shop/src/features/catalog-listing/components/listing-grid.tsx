@@ -1,7 +1,7 @@
 "use client";
 
-import type { ProductListResponse } from "@showcase/api-contract";
-import { Badge, Skeleton } from "@showcase/ui";
+import type { ProductListResponse } from "@fullstack-templates/api-contract";
+import { Badge, Skeleton } from "@fullstack-templates/ui";
 import { useState } from "react";
 import { formatMoney } from "@/config/locale";
 

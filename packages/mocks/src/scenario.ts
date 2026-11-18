@@ -1,4 +1,4 @@
-import { isScenarioName, type ScenarioName } from "@showcase/api-contract";
+import { isScenarioName, type ScenarioName } from "@fullstack-templates/api-contract";
 
 export interface ScenarioSelection {
   global?: ScenarioName;

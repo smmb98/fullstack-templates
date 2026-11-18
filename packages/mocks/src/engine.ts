@@ -1,4 +1,4 @@
-import type { AnyEndpoint } from "@showcase/api-contract";
+import type { AnyEndpoint } from "@fullstack-templates/api-contract";
 import { parseScenarioValue, resolveScenario, scenarioFromCookie } from "./scenario";
 import type { MockHandler, MockResult } from "./types";
 

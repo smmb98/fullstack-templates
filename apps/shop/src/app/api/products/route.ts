@@ -1,4 +1,4 @@
-import { handleProductsList } from "@showcase/mocks";
+import { handleProductsList } from "@fullstack-templates/mocks";
 
 export const dynamic = "force-dynamic";
 

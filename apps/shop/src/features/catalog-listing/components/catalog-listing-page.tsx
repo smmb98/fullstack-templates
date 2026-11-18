@@ -1,10 +1,10 @@
 "use client";
 
-import { AsyncRegion } from "@showcase/ui";
+import { AsyncRegion } from "@fullstack-templates/ui";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import type { ProductSort } from "@showcase/api-contract";
+import type { ProductSort } from "@fullstack-templates/api-contract";
 import { fetchProducts, listingHref, listingKeys, type ListingQuery } from "../api";
 import { ListingFrame } from "./listing-frame";
 import { ListingGrid, ListingSkeleton } from "./listing-grid";

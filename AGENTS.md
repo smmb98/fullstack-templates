@@ -1,4 +1,4 @@
-# AGENTS.md: showcase (read first, keep context small)
+# AGENTS.md: fullstack-templates (read first, keep context small)
 
 Portfolio monorepo of demo sites. Demo #1 is apps/shop (Next.js). The mock API ships inside
 the app; a real NestJS backend comes later and implements docs/contracts/.
@@ -12,7 +12,7 @@ the app; a real NestJS backend comes later and implements docs/contracts/.
 
 ## Commands (always through ./dev, never on the host)
 - ./dev up | down | shell
-- ./dev pnpm check            typecheck + lint + unit + flows drift + contrast + knip. Run before saying "done".
+- ./dev pnpm check            typecheck + lint + unit + storybook build + flows drift + contrast + knip. Run before saying "done".
 - ./dev pnpm flows:gen        regenerate docs/flows/INDEX.md after changing any feature.meta
 - ./dev e2e --grep @<tag>     only the tests of the feature you touched
 - ./dev pnpm e2e:summary      compact failures only (do not read the full report)

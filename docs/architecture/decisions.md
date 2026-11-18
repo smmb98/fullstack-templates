@@ -3,7 +3,7 @@ The fixed architecture decisions (D1-D19) and every later deviation or dependenc
 Read this when a rule seems arbitrary, before changing architecture, or before adding a dependency.
 
 ## Decisions (D1-D19, verbatim from the brief)
-D1  Monorepo: pnpm workspaces + Turborepo. Root dir name `showcase`.
+D1  Monorepo: pnpm workspaces + Turborepo. Root dir name `fullstack-templates`.
 D2  Framework: Next.js (App Router), TypeScript strict, latest stable verified at setup.
     Reason: market demand. Keep data-driven regions as client components behind the
     api client; use server components for static shells and SEO metadata only.
@@ -45,7 +45,7 @@ D19 Final deliverable to clients is a REDUCED build: Theme Lab, Demo Controls,
 ## ADR log (deviations and dependency choices)
 | # | Date | Decision | Why | Alternative considered |
 |---|---|---|---|---|
-| ADR-001 | 2026-11-17 | The repo root is the `showcase` directory itself; no nested `showcase/` folder. | The brief's tree is the repo root; nesting would duplicate paths and break `./dev` assumptions. | Create a nested folder inside the existing repo. |
+| ADR-001 | 2026-11-17 | The repo root is the `fullstack-templates` directory itself (named `showcase` at setup); no nested project folder. | The brief's tree is the repo root; nesting would duplicate paths and break `./dev` assumptions. | Create a nested folder inside the existing repo. |
 | ADR-002 | 2026-11-17 | Pin Node 26.13.1, pnpm 12.21.0, corepack 0.36.0 in the dev image. | Current Node LTS; Node 26 no longer bundles corepack, so corepack is installed explicitly. | Node 24 LTS (older, still supported). |
 | ADR-003 | 2026-11-17 | Playwright service uses `mcr.microsoft.com/playwright:v1.64.1-noble`; `@playwright/test` must stay 1.64.1. | Official image ships matching browsers; version skew breaks runs. 1.64.1 is the newest release at least 14 days old. | 1.65.1 (published inside the release-age window). |
 | ADR-004 | 2026-11-17 | `opencode.json` uses the current `permissions` array schema, not the brief's illustrative `permission` object. | Verified against the live OpenCode config schema at setup time. | Keep the old object shape (not accepted by current OpenCode). |
@@ -59,6 +59,8 @@ D19 Final deliverable to clients is a REDUCED build: Theme Lab, Demo Controls,
 | ADR-012 | 2026-11-17 | Foundation pins: Next 16.4.4, React 19.1.10, TS 5.9.3, Tailwind 3.4.19, TanStack Query 5.105.3, zod 4.6.7, lucide-react 1.66.0, Vitest 5.1.0, ESLint 9.39.5, turbo 2.11.10. All are >= 14 days old. | Brief-mandated stack; pins respect the release-age rule and avoid TS 7 / ESLint 10 major churn. | Track latest tags (violates the 14-day rule, breaks on brand-new majors). |
 | ADR-013 | 2026-11-17 | Build approvals live in `pnpm-workspace.yaml` as `allowBuilds: { esbuild, sharp }`. | pnpm 12 no longer reads the `pnpm` field in `package.json` and fails closed on unapproved build scripts. | `pnpm approve-builds` interactively (not reproducible for agents). |
 | ADR-014 | 2026-11-17 | Storybook 10.6.5 (`@storybook/nextjs`, `addon-a11y`), MSW 3.0.3 with `msw-storybook-addon` 3.0.3, axe `@axe-core/playwright` 4.14.0. No `addon-viewport`: Storybook 10 ships viewport controls. | Matches the pinned Next/React line, one MSW behaviour for app and stories, and the addon folder for v10 no longer exists. | Older Storybook 8 (incompatible with React 19 tooling), separate mock layer for stories (drift). |
+
+| ADR-015 | 2026-11-18 | Rename the deliverable from `showcase` to `fullstack-templates`: root package name, package scope `@fullstack-templates/*`, docs, titles and user-facing copy. Folders (`apps/`, `packages/`), the Docker project name and the store brand "Hearth & Grain" stay unchanged. | The template ships to clients under its own name; a scope rename is mechanical and keeps the slice structure. | Rename folders too (breaks `./dev` paths and the reduction script), or leave `@showcase/*` (the old name leaks into every import). |
 
 ## Adding a dependency
 Before installing anything not listed in D1-D19, add one row here: what, why, and the

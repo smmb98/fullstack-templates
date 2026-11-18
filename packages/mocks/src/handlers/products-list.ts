@@ -1,4 +1,4 @@
-import type { ProductListQuery, ProductListResponse } from "@showcase/api-contract";
+import type { ProductListQuery, ProductListResponse } from "@fullstack-templates/api-contract";
 import { productFacets, products } from "../fixtures/products";
 import { DEFAULT_LATENCY_MS, RATE_LIMIT_SECONDS, type MockHandler, type MockResult } from "../types";
 

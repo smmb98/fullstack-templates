@@ -3,7 +3,7 @@ A new demo is a new app in the monorepo, reusing contract, mocks, UI and tooling
 Read this only after the human says go for a new demo; never start one on your own.
 
 1. Get the human's go and a short brief (category, brand, features, states).
-2. Add `apps/<demo>` (Next.js App Router) using `@showcase/config` presets and `@showcase/ui`.
+2. Add `apps/<demo>` (Next.js App Router) using `@fullstack-templates/config` presets and `@fullstack-templates/ui`.
 3. Namespace its contract endpoints (e.g. `booking.services.list`) in `packages/api-contract`;
    add mock data/handlers and scenario support in `packages/mocks`.
 4. Add `features.config.json`, `features/registry.ts`, providers, demo middleware and the

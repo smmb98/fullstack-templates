@@ -1,10 +1,10 @@
-import { createMswHandlers } from "@showcase/mocks";
-import { ThemeProvider, type FontName, type SchemeName, type ThemeName } from "@showcase/ui";
+import { createMswHandlers } from "@fullstack-templates/mocks";
+import { ThemeProvider, type FontName, type SchemeName, type ThemeName } from "@fullstack-templates/ui";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Decorator, Preview } from "@storybook/nextjs";
 import { mswLoader } from "msw-storybook-addon/csf3";
 import { useEffect, useState, type ReactNode } from "react";
-import "@showcase/ui/tokens.css";
+import "@fullstack-templates/ui/tokens.css";
 import "../src/app/globals.css";
 
 function StoryProviders({ children }: { children: ReactNode }) {

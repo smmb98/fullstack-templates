@@ -1,5 +1,5 @@
 {
-  "name": "@showcase/api-contract",
+  "name": "@fullstack-templates/api-contract",
   "private": true,
   "version": "0.0.0",
   "type": "module",

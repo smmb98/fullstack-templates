@@ -1,6 +1,6 @@
-import type { Facets, ProductListResponse } from "@showcase/api-contract";
-import { products } from "@showcase/mocks";
-import { AsyncRegion, type RegionState } from "@showcase/ui";
+import type { Facets, ProductListResponse } from "@fullstack-templates/api-contract";
+import { products } from "@fullstack-templates/mocks";
+import { AsyncRegion, type RegionState } from "@fullstack-templates/ui";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import type { ListingQuery } from "./api";
 import { ListingFrame } from "./components/listing-frame";

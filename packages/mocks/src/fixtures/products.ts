@@ -1,4 +1,4 @@
-import type { Product, ProductListResponse } from "@showcase/api-contract";
+import type { Product, ProductListResponse } from "@fullstack-templates/api-contract";
 
 const image = (slug: string, alt: string) => ({
   src: `/images/products/${slug}.svg`,

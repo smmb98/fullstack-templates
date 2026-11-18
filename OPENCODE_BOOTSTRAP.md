@@ -1,4 +1,4 @@
-# OPENCODE BOOTSTRAP BRIEF: "showcase" monorepo, demo #1 = Shop
+# OPENCODE BOOTSTRAP BRIEF: "fullstack-templates" monorepo, demo #1 = Shop
 
 > Hand this file to opencode in an EMPTY directory. It is a one-time setup brief.
 > It tells you (the agent) what to install, what to write, where to write it, and
@@ -112,7 +112,7 @@ QUALITY BAR
 
 ## Part 3. Decisions (already made; also written verbatim to docs/architecture/decisions.md)
 
-D1  Monorepo: pnpm workspaces + Turborepo. Root dir name `showcase`.
+D1  Monorepo: pnpm workspaces + Turborepo. Root dir name `fullstack-templates`.
 D2  Framework: Next.js (App Router), TypeScript strict, latest stable verified at setup.
     Reason: market demand. Keep data-driven regions as client components behind the
     api client; use server components for static shells and SEO metadata only.
@@ -162,7 +162,7 @@ Tick each step in `docs/manager/bootstrap-progress.md` when its gate passes, the
 Create this layout (empty folders get a `.gitkeep`):
 
 ```
-showcase/
+fullstack-templates/
   AGENTS.md                      (Part 8, file A)
   opencode.json                  (Part 8, file F)
   dev  dev.ps1                   (wrapper, 4.2)
@@ -272,10 +272,10 @@ Gate 4.4: every path in `docs/INDEX.md` exists; `AGENTS.md` <= 80 lines.
 
 ### 4.5 Foundation packages
 
-- `@showcase/config`: tsconfig presets, ESLint (include `jsx-a11y`), Prettier, knip config.
-- `@showcase/api-contract`: zod schemas, `ApiError` + kinds, endpoint registry (5.1).
-- `@showcase/mocks`: scenario engine, deterministic fixtures, handlers, Next and MSW adapters (5.2).
-- `@showcase/ui`: tokens + Tailwind preset, primitives, `AsyncRegion`, `ErrorState`,
+- `@fullstack-templates/config`: tsconfig presets, ESLint (include `jsx-a11y`), Prettier, knip config.
+- `@fullstack-templates/api-contract`: zod schemas, `ApiError` + kinds, endpoint registry (5.1).
+- `@fullstack-templates/mocks`: scenario engine, deterministic fixtures, handlers, Next and MSW adapters (5.2).
+- `@fullstack-templates/ui`: tokens + Tailwind preset, primitives, `AsyncRegion`, `ErrorState`,
   `EmptyState`, skeleton kit, `OfflineBanner`, `ThemeProvider`, `useOnlineStatus`,
   central state copy (5.3, 5.4).
 - `apps/shop`: Next.js app shell, api client, providers (QueryClient, Theme), feature
@@ -560,7 +560,7 @@ Write each file exactly as shown (strip the outer four-backtick fence).
 ### A. `AGENTS.md`
 
 ````markdown
-# AGENTS.md: showcase (read first, keep context small)
+# AGENTS.md: fullstack-templates (read first, keep context small)
 
 Portfolio monorepo of demo sites. Demo #1 is apps/shop (Next.js). The mock API ships inside
 the app; a real NestJS backend comes later and implements docs/contracts/.

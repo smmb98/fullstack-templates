@@ -27,7 +27,7 @@ case "$cmd" in
   shell) docker compose run --rm tools sh ;;
   e2e)
     status=0
-    docker compose run --rm --no-deps e2e sh -lc 'exec "$@"' -- pnpm --filter @showcase/shop e2e "$@" || status=$?
+    docker compose run --rm --no-deps e2e sh -lc 'exec "$@"' -- pnpm --filter @fullstack-templates/shop e2e "$@" || status=$?
     cleanup_mountpoints
     exit $status
     ;;

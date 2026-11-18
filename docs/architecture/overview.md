@@ -28,7 +28,7 @@ backend replaces the mock API; frontends deploy to Netlify.
 
 ## Repo layout
 ```
-showcase/                     repo root (this directory)
+fullstack-templates/          repo root (this directory)
   AGENTS.md  opencode.json    agent entry point and config
   dev  dev.ps1                command wrappers (POSIX / Windows)
   docker-compose.yml  docker/Dockerfile.dev

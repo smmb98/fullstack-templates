@@ -1,5 +1,5 @@
-import type { Facets, ProductSort } from "@showcase/api-contract";
-import { Button, cn } from "@showcase/ui";
+import type { Facets, ProductSort } from "@fullstack-templates/api-contract";
+import { Button, cn } from "@fullstack-templates/ui";
 import type { ReactNode } from "react";
 import type { ListingQuery } from "../api";
 

@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@showcase/api-contract", "@showcase/mocks", "@showcase/ui"],
+  transpilePackages: ["@fullstack-templates/api-contract", "@fullstack-templates/mocks", "@fullstack-templates/ui"],
   poweredByHeader: false,
 };
 

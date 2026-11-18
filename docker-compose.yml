@@ -32,7 +32,7 @@ services:
 
   app:
     <<: *dev-service
-    command: pnpm --filter @showcase/shop dev
+    command: pnpm --filter @fullstack-templates/shop dev
     networks:
       default:
         aliases:
@@ -47,7 +47,7 @@ services:
 
   storybook:
     <<: *dev-service
-    command: pnpm --filter @showcase/shop storybook
+    command: pnpm --filter @fullstack-templates/shop storybook
     ports:
       - "6006:6006"
 
