@@ -34,6 +34,7 @@ export default async function ProductsPage({
 
   const sortEnabled = isFeatureEnabled("catalogSort");
   const filtersEnabled = isFeatureEnabled("catalogFilters");
+  const detailEnabled = isFeatureEnabled("productDetail");
   const params = await searchParams;
   const filters = filtersEnabled ? readCatalogFilters(params) : emptyFilters;
   const query: ListingQuery = {
@@ -49,6 +50,7 @@ export default async function ProductsPage({
       initialQuery={query}
       sortEnabled={sortEnabled}
       filtersEnabled={filtersEnabled}
+      detailEnabled={detailEnabled}
     />
   );
 }

@@ -3,7 +3,7 @@ import { expectAxeClean, expectState, gotoWithScenario } from "./_harness";
 
 const region = (page: Page) => page.getByTestId("region-catalog-listing");
 const panel = (page: Page) => page.getByTestId("region-search");
-const box = (page: Page) => page.getByRole("combobox", { name: "Search the collection" });
+const box = (page: Page) => page.getByRole("combobox", { name: "Search products" });
 
 test.describe("search @search", () => {
   test("suggestions open on the keyboard and Enter visits the active one @search", async ({

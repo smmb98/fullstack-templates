@@ -23,6 +23,46 @@ export const productSchema = z.object({
 });
 export type Product = z.infer<typeof productSchema>;
 
+/** One buyable combination of colour and size. `One size` when the product has no sizes. */
+export const productVariantSchema = z.object({
+  id: z.string().min(1),
+  color: z.string().min(1),
+  size: z.string().min(1),
+  inStock: z.boolean(),
+  stock: z.number().int().nonnegative(),
+});
+export type ProductVariant = z.infer<typeof productVariantSchema>;
+
+export const productSpecSchema = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+});
+export type ProductSpec = z.infer<typeof productSpecSchema>;
+
+/** Extra fields the detail page needs; the listing stays lean. */
+export const productDetailSchema = productSchema.extend({
+  highlights: z.array(z.string()).default([]),
+  specs: z.array(productSpecSchema).default([]),
+  care: z.array(z.string()).default([]),
+  variants: z.array(productVariantSchema).default([]),
+  /** Honest delivery note derived from stock, e.g. "Made to order · 6–8 weeks". */
+  leadTime: z.string().nullable().default(null),
+});
+export type ProductDetail = z.infer<typeof productDetailSchema>;
+
+export const productDetailQuerySchema = z.object({
+  /** The slug is the URL identity, so it can be a little longer than a title. */
+  slug: z.string().trim().min(1).max(160),
+});
+export type ProductDetailQuery = z.infer<typeof productDetailQuerySchema>;
+
+export const productDetailResponseSchema = z.object({
+  product: productDetailSchema,
+  /** Set when some sections (images, specs) could not be loaded. */
+  partial: z.boolean().optional(),
+});
+export type ProductDetailResponse = z.infer<typeof productDetailResponseSchema>;
+
 export const productSortSchema = z.enum([
   "relevance",
   "price-asc",

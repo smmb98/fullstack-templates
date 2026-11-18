@@ -230,7 +230,11 @@ export const products: Product[] = [
     brand: "Northline",
     category: "Furniture",
     categoryPath: ["Furniture", "Tables"],
-    images: [image("oak-dining-table", "Oak dining table")],
+    images: [
+      image("oak-dining-table", "Oak dining table"),
+      image("oak-dining-table-detail", "Detail of the oak table edge and joint"),
+      image("oak-dining-table-room", "Oak dining table set for dinner in a bright room"),
+    ],
     inStock: false,
     stock: 0,
     colors: ["Natural oak"],

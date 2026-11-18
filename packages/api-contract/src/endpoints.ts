@@ -1,7 +1,12 @@
 import type { z } from "zod";
 import type { ScenarioName } from "./scenarios";
 import { scenarioNames } from "./scenarios";
-import { productListQuerySchema, productListResponseSchema } from "./schemas/product";
+import {
+  productDetailQuerySchema,
+  productDetailResponseSchema,
+  productListQuerySchema,
+  productListResponseSchema,
+} from "./schemas/product";
 import { searchSuggestQuerySchema, searchSuggestResponseSchema } from "./schemas/search";
 
 export interface EndpointDefinition {
@@ -32,8 +37,18 @@ export const searchSuggestEndpoint = {
   scenarios: scenarioNames,
 } satisfies EndpointDefinition;
 
+export const productDetailEndpoint = {
+  id: "products.detail",
+  method: "GET",
+  path: "/products/detail",
+  query: productDetailQuerySchema,
+  response: productDetailResponseSchema,
+  scenarios: scenarioNames,
+} satisfies EndpointDefinition;
+
 export const endpoints = {
   productsList: productsListEndpoint,
+  productDetail: productDetailEndpoint,
   searchSuggest: searchSuggestEndpoint,
 } as const;
 

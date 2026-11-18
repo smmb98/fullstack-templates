@@ -1,30 +1,30 @@
 # Status (<= 30 lines, rewritten at the end of every session)
 Phase: 2 (shop features) - in progress    Last updated: 2026-11-18
 ## Done
-- `search` slice: header combobox (`role="combobox"`, `aria-activedescendant`) with a 250ms
-  debounced `search.suggest`, arrow-key nav that wraps, Enter to open, Escape keeps focus,
-  click rows, and a real GET fallback to `/products?q=`.
-- Suggestions are products first (title prefix wins), then one category and one brand, all
-  mapped onto the catalog URL contract (`?q=`, `?category=`, `?brand=`).
-- Recent searches: localStorage, newest first, case-insensitive de-dupe, cap 5, clear button,
-  survives reload; empty input shows them instead of a request.
-- Popup mirrors region states on `data-testid="region-search"` (loading, ready,
-  empty:no-results, error:http, error:rate-limited, error:network) with retry on failure.
+- `product-detail` slice: `/products/[slug]` with breadcrumbs, gallery (thumbnails, per-image
+  fallback), colour/size radios with real per-combination stock, quantity clamp, add to bag
+  (localStorage `fullstack-templates-cart`), native `<details>` accordion, `Product` JSON-LD and
+  a mobile sticky buy bar.
+- Contract: `products.detail` (`GET /products/detail?slug=`) returning `productDetailSchema`
+  (highlights, specs, care, variants, leadTime) plus `partial`. Mocks derive specs/care/stock
+  splits from each product, with hand-written copy for five fixtures.
+- Catalog cards link to detail pages while the flag is on (plain href, no cross-feature import).
+- Fixed header search label to "Search products" so two search fields stay unambiguous.
 ## Gate evidence
-- `./dev pnpm check` green: typecheck, lint, 51 unit tests (8 new search), storybook build,
-  flows:check (4 features), contrast (30 pairs), knip (config hints only).
-- `./dev e2e --grep "@search"` green: 14 passed (desktop + mobile).
-- `./dev e2e --grep "@catalog-listing|@catalog-filters|@catalog-sort|@storybook"` green: 88 passed.
+- `./dev pnpm check` green: typecheck, lint, 65 unit tests (14 new), storybook build,
+  flows:check (5 features), contrast (30 pairs), knip (config hints only).
+- `./dev e2e --grep "@product-detail"` green: 17 passed, 1 skipped (sticky bar on desktop).
+- Full feature sweep green: 118 passed, 2 skipped (`@catalog-*|@search|@product-detail|@storybook`).
 ## Next 3
-1. `product-detail`: gallery, variants, stock, add to cart, accordion, JSON-LD, sticky mobile bar.
-2. `reviews`: list, filter by rating, helpful votes, write-a-review form.
-3. `related-recent`: related products plus recently viewed.
+1. `reviews`: list, filter by rating, helpful votes, write-a-review form.
+2. `related-recent`: related products plus recently viewed.
+3. `cart`: bag page reading the same `fullstack-templates-cart` lines, quick add on cards.
 ## Blockers
 - None. Restart `app`/`storybook` after code changes (Turbopack ignores the Windows mount).
 ## Decisions this session
-- Suggestion responses echo their query and the client keys results by the normalized text, so a
-  late response can never label the wrong query.
-- Search submits a real GET form, so the header search works before hydration; the combobox is an
-  enhancement on top of it.
-- Products, categories and brands stay inside the existing catalog URL params instead of a new
-  search route; `product-detail` will later point product hits at their own page.
+- Product detail is query-fed like every other region, so JSON-LD renders client-side; Phase 3
+  SEO will move it server-side. A 404 state's "Try again" navigates to the collection.
+- Variant stock is split evenly from product stock, remainder first: a low-stock product with
+  many variants honestly shows some combinations as unavailable.
+- The bag line shape lives in `product-detail/cart.ts`; the `cart` slice will read and extend it.
+- Storybook's all-stories test now asserts a mounted child and has a 180s budget (35 stories).

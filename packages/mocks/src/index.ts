@@ -4,5 +4,7 @@ export * from "./engine";
 export * from "./next";
 export * from "./msw";
 export * from "./fixtures/products";
+export * from "./fixtures/product-details";
 export * from "./handlers/products-list";
+export * from "./handlers/product-detail";
 export * from "./handlers/search-suggest";

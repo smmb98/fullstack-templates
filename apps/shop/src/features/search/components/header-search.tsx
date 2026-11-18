@@ -130,7 +130,7 @@ export function HeaderSearch() {
       className="relative order-3 w-full sm:order-2 sm:w-72"
     >
       <label htmlFor="header-search-input" className="sr-only">
-        Search the collection
+        Search products
       </label>
       <div className="flex gap-2">
         <input

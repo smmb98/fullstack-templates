@@ -30,10 +30,12 @@ export function CatalogListingPage({
   initialQuery,
   sortEnabled = true,
   filtersEnabled = true,
+  detailEnabled = true,
 }: {
   initialQuery: ListingQuery;
   sortEnabled?: boolean;
   filtersEnabled?: boolean;
+  detailEnabled?: boolean;
 }) {
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -181,6 +183,7 @@ export function CatalogListingPage({
           <ListingGrid
             data={data}
             view={committedView}
+            productHref={detailEnabled ? (product) => `/products/${product.slug}` : undefined}
             pageHref={(page) =>
               listingHref({
                 ...base(),

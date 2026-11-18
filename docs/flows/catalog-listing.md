@@ -43,8 +43,8 @@ Browse, search, filter, sort, switch grid/list and page through results with URL
 - The empty grid owns the single "Clear filters" action; the sidebar only offers "Clear all"
   when something is applied, so the page never shows the same action twice in one view.
 - Long titles and descriptions wrap; prices stay on one line.
-- `slow` shows the skeleton first, then ready: never asserted as a steady state.
-- Quick add to cart arrives with the `cart` slice (the card will then depend on `cart`).
+- `slow` shows the skeleton first, then ready: never asserted as a steady state. Quick add to
+  cart arrives with the `cart` slice (the card will then depend on `cart`).
 ## Tests
 Tag @catalog-listing; spec `apps/shop/e2e/catalog-listing.spec.ts`; stories
 `apps/shop/src/features/catalog-listing/listing.stories.tsx` (one story per state,
@@ -55,5 +55,5 @@ offline recovery and axe on ready + empty + error.
 ## Dependencies
 dependsOn: catalog-sort, catalog-filters.   Endpoints: products.list.   Flag: catalogListing.
 ## Reduction notes
-Referenced by the header link, the home hero buttons and `layout.tsx` footer copy.
-Removing the slice means deleting the flag, `/products`, the nav links and this card.
+Header link, home hero buttons and `layout.tsx` footer use this slice. Card titles link to
+`/products/<slug>` while `product-detail` is on. Removing it removes the flag and the route.

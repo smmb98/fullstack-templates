@@ -7,7 +7,7 @@ import { productFacets, products } from "../fixtures/products";
 import { DEFAULT_LATENCY_MS, RATE_LIMIT_SECONDS, type MockHandler, type MockResult } from "../types";
 
 /** Deterministic 512-item catalog so pagination has something to page through. */
-const largeCatalog: Product[] = Array.from({ length: 512 }, (_, index) => {
+export const largeCatalog: Product[] = Array.from({ length: 512 }, (_, index) => {
   const base = products[index % products.length];
   return {
     ...base,

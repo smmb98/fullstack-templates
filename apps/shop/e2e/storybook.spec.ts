@@ -17,7 +17,11 @@ async function gotoStory(page: Page, id: string): Promise<string[]> {
   page.on("pageerror", onPageError);
 
   await page.goto(`${storybookUrl}/iframe.html?id=${id}&viewMode=story`);
-  await expect(page.locator("#storybook-root")).not.toBeEmpty({ timeout: 15_000 });
+  // A skeleton-only story has no text, so assert that the story mounted a child element.
+  await expect(
+    page.locator("#storybook-root > *"),
+    `story ${id} rendered`,
+  ).not.toHaveCount(0, { timeout: 15_000 });
 
   page.off("console", onConsole);
   page.off("pageerror", onPageError);
@@ -29,6 +33,8 @@ test.describe("storybook renders @storybook", () => {
     page,
     request,
   }) => {
+    // One test walks every Feature story, so it needs more than the default 30s.
+    test.setTimeout(180_000);
     const indexResponse = await request.get(`${storybookUrl}/index.json`);
     expect(indexResponse.ok()).toBeTruthy();
     const index = (await indexResponse.json()) as StoryIndex;

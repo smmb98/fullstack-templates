@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Oak Dining Table, detail">
+  <title>Oak Dining Table, detail</title>
+  <rect width="800" height="600" fill="#efe1cc" />
+  <rect x="0" y="300" width="800" height="300" fill="#d9bd94" />
+  <rect x="60" y="250" width="680" height="60" rx="6" fill="#b07b45" />
+  <rect x="60" y="310" width="680" height="14" fill="#8a5a30" />
+  <path d="M100 330 L120 560 M700 330 L680 560" stroke="#7a4d28" stroke-width="22" stroke-linecap="round" />
+  <circle cx="600" cy="150" r="88" fill="#9a3d1c" opacity="0.65" />
+</svg>

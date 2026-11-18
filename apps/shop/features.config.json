@@ -2,5 +2,6 @@
   "catalogListing": true,
   "catalogSort": true,
   "catalogFilters": true,
-  "search": true
+  "search": true,
+  "productDetail": true
 }

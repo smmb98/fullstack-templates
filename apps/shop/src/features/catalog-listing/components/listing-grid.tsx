@@ -2,6 +2,7 @@
 
 import type { ProductListResponse } from "@fullstack-templates/api-contract";
 import { Badge, cn, Skeleton } from "@fullstack-templates/ui";
+import Link from "next/link";
 import { useState, type MouseEvent } from "react";
 import { formatMoney } from "@/config/locale";
 import type { ListingView } from "../api";
@@ -75,7 +76,24 @@ function Rating({ product }: { product: Product }) {
   );
 }
 
-function ProductCard({ product }: { product: Product }) {
+function CardTitle({ product, href }: { product: Product; href?: string }) {
+  return (
+    <h2 className="font-display text-lg leading-snug text-ink">
+      {href ? (
+        <Link
+          href={href}
+          className="hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+        >
+          {product.title}
+        </Link>
+      ) : (
+        product.title
+      )}
+    </h2>
+  );
+}
+
+function ProductCard({ product, href }: { product: Product; href?: string }) {
   return (
     <li className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-surface">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-subtle">
@@ -88,7 +106,7 @@ function ProductCard({ product }: { product: Product }) {
 
       <div className="flex flex-1 flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-3">
-          <h2 className="font-display text-lg leading-snug text-ink">{product.title}</h2>
+          <CardTitle product={product} href={href} />
           <div className="shrink-0 text-right">
             <Price product={product} />
           </div>
@@ -103,7 +121,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-function ProductRow({ product }: { product: Product }) {
+function ProductRow({ product, href }: { product: Product; href?: string }) {
   return (
     <li className="overflow-hidden rounded-lg border border-line bg-surface">
       <div className="flex flex-col sm:flex-row">
@@ -116,7 +134,7 @@ function ProductRow({ product }: { product: Product }) {
         </div>
         <div className="flex flex-1 flex-col gap-2 p-4 sm:p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <h2 className="font-display text-lg leading-snug text-ink">{product.title}</h2>
+            <CardTitle product={product} href={href} />
             <Price product={product} />
           </div>
           <p className="max-w-prose text-sm leading-relaxed text-muted">{product.description}</p>
@@ -135,6 +153,8 @@ export interface ListingGridProps {
   view?: ListingView;
   pageHref?: (page: number) => string;
   onPageChange?: (page: number) => void;
+  /** Builds the product page link; omitted when the detail slice is switched off. */
+  productHref?: (product: Product) => string;
 }
 
 function pageWindow(page: number, totalPages: number): Array<number | "gap"> {
@@ -219,7 +239,13 @@ function Pagination({
   );
 }
 
-export function ListingGrid({ data, view = "grid", pageHref, onPageChange }: ListingGridProps) {
+export function ListingGrid({
+  data,
+  view = "grid",
+  pageHref,
+  onPageChange,
+  productHref,
+}: ListingGridProps) {
   const list = view === "list";
   return (
     <section aria-labelledby="catalog-results">
@@ -240,9 +266,9 @@ export function ListingGrid({ data, view = "grid", pageHref, onPageChange }: Lis
       >
         {data.items.map((product) =>
           list ? (
-            <ProductRow key={product.id} product={product} />
+            <ProductRow key={product.id} product={product} href={productHref?.(product)} />
           ) : (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} href={productHref?.(product)} />
           ),
         )}
       </ul>

@@ -9,6 +9,7 @@ import {
 } from "./_harness";
 
 const region = (page: Page) => primaryRegion(page, "catalog-listing");
+const catalogSearch = (page: Page) => page.getByRole("search", { name: "Catalog search" });
 
 interface MatrixEntry {
   scenario: string;
@@ -75,7 +76,7 @@ test.describe("catalog listing behaviour @catalog-listing", () => {
   test("a large collection waits for the Search button @catalog-listing", async ({ page }) => {
     await gotoWithScenario(page, "/products", "large");
     await expectState(region(page), "ready");
-    const searchButton = page.getByRole("button", { name: "Search" });
+    const searchButton = catalogSearch(page).getByRole("button", { name: "Search" });
     await expect(searchButton).toBeVisible();
 
     await page.getByLabel("Search the collection").fill("candle");
@@ -183,7 +184,7 @@ test.describe("catalog listing behaviour @catalog-listing", () => {
     await expect(page).toHaveURL(/[?&]page=2/);
 
     await page.getByLabel("Search the collection").fill("candle");
-    await page.getByRole("button", { name: "Search" }).click();
+    await catalogSearch(page).getByRole("button", { name: "Search" }).click();
 
     await expect(page).toHaveURL(/[?&]q=candle/);
     await expect(page).not.toHaveURL(/[?&]page=/);
