@@ -32,6 +32,7 @@ export const products: Product[] = [
     colors: ["Natural oak", "Walnut"],
     materials: ["Oak", "Paper cord"],
     sizes: [],
+    createdAt: "2025-01-15T09:00:00.000Z",
   },
   {
     id: "p-002",
@@ -51,6 +52,7 @@ export const products: Product[] = [
     colors: ["Oat"],
     materials: ["Linen", "Brass"],
     sizes: [],
+    createdAt: "2025-02-10T09:00:00.000Z",
   },
   {
     id: "p-003",
@@ -70,6 +72,7 @@ export const products: Product[] = [
     colors: ["Speckled cream"],
     materials: ["Stoneware"],
     sizes: ["Small", "Large"],
+    createdAt: "2025-03-08T09:00:00.000Z",
   },
   {
     id: "p-004",
@@ -89,6 +92,7 @@ export const products: Product[] = [
     colors: ["Chalk", "Clay", "Moss"],
     materials: ["Linen"],
     sizes: ["Full/Queen", "King"],
+    createdAt: "2025-04-02T09:00:00.000Z",
   },
   {
     id: "p-005",
@@ -108,6 +112,7 @@ export const products: Product[] = [
     colors: ["Cedar"],
     materials: ["Cedar", "Leather"],
     sizes: [],
+    createdAt: "2025-05-21T09:00:00.000Z",
   },
   {
     id: "p-006",
@@ -127,6 +132,7 @@ export const products: Product[] = [
     colors: ["Terracotta"],
     materials: ["Clay"],
     sizes: [],
+    createdAt: "2025-06-18T09:00:00.000Z",
   },
   {
     id: "p-007",
@@ -149,6 +155,7 @@ export const products: Product[] = [
     colors: ["Brass"],
     materials: ["Brass"],
     sizes: [],
+    createdAt: "2025-07-09T09:00:00.000Z",
   },
   {
     id: "p-008",
@@ -169,6 +176,7 @@ export const products: Product[] = [
     colors: ["Weathered teak"],
     materials: ["Teak"],
     sizes: [],
+    createdAt: "2025-08-14T09:00:00.000Z",
   },
   {
     id: "p-009",
@@ -188,6 +196,7 @@ export const products: Product[] = [
     colors: ["Natural"],
     materials: ["Linen"],
     sizes: [],
+    createdAt: "2025-09-03T09:00:00.000Z",
   },
   {
     id: "p-010",
@@ -207,6 +216,7 @@ export const products: Product[] = [
     colors: ["Aged steel"],
     materials: ["Steel"],
     sizes: [],
+    createdAt: "2025-10-27T09:00:00.000Z",
   },
   {
     id: "p-011",
@@ -226,6 +236,7 @@ export const products: Product[] = [
     colors: ["Natural oak"],
     materials: ["Oak"],
     sizes: ["180 cm", "220 cm", "260 cm", "300 cm"],
+    createdAt: "2025-11-11T09:00:00.000Z",
   },
   {
     id: "p-012",
@@ -245,6 +256,7 @@ export const products: Product[] = [
     colors: ["Chalk", "Slate"],
     materials: ["Ceramic"],
     sizes: ["Set of 3"],
+    createdAt: "2025-12-05T09:00:00.000Z",
   },
 ];
 

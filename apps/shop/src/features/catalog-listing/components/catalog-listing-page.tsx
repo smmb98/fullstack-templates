@@ -18,7 +18,13 @@ import { ListingGrid, ListingSkeleton } from "./listing-grid";
 const LIVE_SEARCH_LIMIT = 100;
 const SEARCH_DEBOUNCE_MS = 300;
 
-export function CatalogListingPage({ initialQuery }: { initialQuery: ListingQuery }) {
+export function CatalogListingPage({
+  initialQuery,
+  sortEnabled = true,
+}: {
+  initialQuery: ListingQuery;
+  sortEnabled?: boolean;
+}) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const query = useQuery({
@@ -140,6 +146,7 @@ export function CatalogListingPage({ initialQuery }: { initialQuery: ListingQuer
       searchText={searchText}
       isLarge={isLarge}
       showClear={hasResults}
+      showSort={sortEnabled}
       view={committedView}
       facets={query.data?.facets}
       onSearchChange={setSearchText}

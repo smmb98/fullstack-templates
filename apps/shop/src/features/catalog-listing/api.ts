@@ -1,5 +1,6 @@
 import type { ProductListResponse, ProductSort } from "@fullstack-templates/api-contract";
 import { productsListEndpoint } from "@fullstack-templates/api-contract";
+import { sortParamValue } from "@/features/catalog-sort";
 import { apiRequest } from "@/lib/api-client";
 
 export type ListingView = "grid" | "list";
@@ -29,7 +30,8 @@ export function listingHref(query: ListingQuery): string {
   const params = new URLSearchParams();
   if (query.q) params.set("q", query.q);
   if (query.category) params.set("category", query.category);
-  if (query.sort && query.sort !== "relevance") params.set("sort", query.sort);
+  const sort = sortParamValue(query.sort);
+  if (sort) params.set("sort", sort);
   if (query.view && query.view !== "grid") params.set("view", query.view);
   if (query.page && query.page > 1) params.set("page", String(query.page));
   const search = params.toString();

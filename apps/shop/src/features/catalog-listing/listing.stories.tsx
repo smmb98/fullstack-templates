@@ -60,6 +60,7 @@ function Preview({
       searchText=""
       isLarge={isLarge}
       showClear
+      showSort
       view={view}
       facets={facetData}
       onSearchChange={() => undefined}

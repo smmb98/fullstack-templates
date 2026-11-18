@@ -25,6 +25,7 @@ const validProduct = {
   colors: ["Oak"],
   materials: ["Oak"],
   sizes: [],
+  createdAt: "2025-01-15T09:00:00.000Z",
 };
 
 describe("product schema", () => {

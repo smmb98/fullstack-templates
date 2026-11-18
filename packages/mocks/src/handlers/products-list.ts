@@ -44,6 +44,11 @@ function applyQuery(items: Product[], query: ProductListQuery): Product[] {
     case "best-selling":
       result = [...result].sort((a, b) => b.reviewCount - a.reviewCount);
       break;
+    case "newest":
+      result = [...result].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+      break;
     default:
       break;
   }

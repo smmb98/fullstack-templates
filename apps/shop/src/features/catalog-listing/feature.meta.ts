@@ -37,7 +37,7 @@ export default defineFeature({
     "rate-limit": "error:rate-limited",
     "bad-json": "error:parse",
   },
-  dependsOn: [],
+  dependsOn: ["catalog-sort"],
   tag: "catalog-listing",
   nav: { label: "Collection", href: "/products", placement: "header" },
 });

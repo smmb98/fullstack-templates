@@ -19,6 +19,7 @@ export const productSchema = z.object({
   colors: z.array(z.string()).default([]),
   materials: z.array(z.string()).default([]),
   sizes: z.array(z.string()).default([]),
+  createdAt: z.iso.datetime(),
 });
 export type Product = z.infer<typeof productSchema>;
 

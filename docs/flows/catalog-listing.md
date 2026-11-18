@@ -53,7 +53,7 @@ large-set submit, category chips, URL-synced pagination, filter resetting the pa
 toggle (keyboard) and persistence, a decoded vase photo, the placeholder fallback, offline
 recovery and axe on ready + empty + error.
 ## Dependencies
-dependsOn: none.   Endpoints: products.list.   Flag: catalogListing.
+dependsOn: catalog-sort.   Endpoints: products.list.   Flag: catalogListing.
 ## Reduction notes
 Referenced by the header link, the home hero buttons and `layout.tsx` footer copy.
 Removing the slice means deleting the flag, `/products`, the nav links and this card.

@@ -1,15 +1,8 @@
 import type { Facets, ProductSort } from "@fullstack-templates/api-contract";
 import { Button, cn } from "@fullstack-templates/ui";
 import type { ReactNode } from "react";
+import { SortControl } from "@/features/catalog-sort";
 import type { ListingQuery, ListingView } from "../api";
-
-const sortOptions = [
-  { value: "relevance", label: "Most relevant" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
-  { value: "rating", label: "Top rated" },
-  { value: "best-selling", label: "Best selling" },
-] as const;
 
 export interface ListingFrameProps {
   query: ListingQuery;
@@ -17,6 +10,7 @@ export interface ListingFrameProps {
   isLarge: boolean;
   /** The empty state owns the clear-filters action, so the form hides its own. */
   showClear: boolean;
+  showSort: boolean;
   view: ListingView;
   facets?: Facets;
   onSearchChange: (value: string) => void;
@@ -42,6 +36,7 @@ export function ListingFrame({
   searchText,
   isLarge,
   showClear,
+  showSort,
   view,
   facets,
   onSearchChange,
@@ -98,24 +93,9 @@ export function ListingFrame({
             </p>
           ) : null}
         </div>
-        <div className="sm:w-56">
-          <label htmlFor="catalog-sort" className="mb-1 block text-sm font-medium text-ink">
-            Sort by
-          </label>
-          <select
-            id="catalog-sort"
-            name="sort"
-            value={query.sort ?? "relevance"}
-            onChange={(event) => onSortChange(event.target.value as ProductSort)}
-            className="min-h-11 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-          >
-            {sortOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        {showSort ? (
+          <SortControl value={query.sort} onChange={onSortChange} />
+        ) : null}
         <div>
           <span id="catalog-view-label" className="mb-1 block text-sm font-medium text-ink">
             Layout

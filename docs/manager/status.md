@@ -1,24 +1,25 @@
 # Status (<= 30 lines, rewritten at the end of every session)
 Phase: 2 (shop features) - in progress    Last updated: 2026-11-18
 ## Done
-- Phase 1 closed on human "go".
 - `catalog-listing` grown: grid/list toggle (`?view=list`), URL-synced pagination (`?page=`),
-  compare-at price on sale cards, real anchor pager that works without JS, filters reset the
-  page, large scenario now serves a deterministic 512-item catalog. Quick add waits for `cart`.
+  compare-at price on sale cards, anchor pager, filters reset the page, 512-item `large` mock.
+- `catalog-sort` slice: native sort select (relevance, price asc/desc, newest, rating, best
+  selling) in its own feature; URL sync via `?sort=`, reload persistence, sort + filter combined,
+  invalid values ignored. `catalog-listing` depends on it.
+- Contract: `Product.createdAt` added (ISO datetime) so "newest" is real; fixtures dated.
 ## Gate evidence
-- `./dev pnpm check` green: typecheck, lint, 26 unit tests, storybook:build, flows:check,
-  contrast:check (30 pairs), knip (config hints only).
-- `./dev e2e --grep "@catalog-listing"` green: 50 passed (desktop + mobile), incl. pagination
-  reload, filter page-reset, keyboard layout toggle, axe on ready + empty + error.
-- `./dev e2e --grep "@storybook"` green: every `Features/*` story renders, placeholder story ok.
+- `./dev pnpm check` green: typecheck, lint, 29 unit tests (incl. sort URL parsing), storybook
+  build, flows:check (2 features), contrast (30 pairs), knip (config hints only).
+- `./dev e2e --grep "@catalog-sort"` green: 12 passed (desktop + mobile).
+- `./dev e2e --grep "@catalog-listing|@storybook"` green: 54 passed; listing unchanged by the
+  sort extraction and both new Sort stories render.
 ## Next 3
-1. `catalog-sort`: dedicated sort slice, URL sync, persistence on reload, sort + filter combined.
-2. `catalog-filters`: facet tree, price range, rating, stock/sale, color/material, chips, drawer.
-3. `search`: header search with debounced autosuggest, keyboard nav, recent searches.
+1. `catalog-filters`: facet tree, price range, rating, stock/sale, color/material, chips, drawer.
+2. `search`: header search with debounced autosuggest, keyboard nav, recent searches.
+3. `product-detail`: gallery, variants, stock, add to cart, accordion, JSON-LD, sticky mobile bar.
 ## Blockers
-- None. Remember: restart `app`/`storybook` after code changes (Turbopack ignores the Windows
-  bind mount watcher); a stopped app makes every e2e fail with ERR_NAME_NOT_RESOLVED.
+- None. Restart `app`/`storybook` after code changes (Turbopack ignores the Windows mount).
 ## Decisions this session
-- Pagination links are anchors with client-side handlers, so paging still works without JS.
-- The `large` mock scenario serves 512 synthetic products (ids/titles suffixed) instead of
-  repeating 12 items, so page 2 is provably different from page 1.
+- Pagination links are anchors with client handlers, so paging works without JavaScript.
+- Flags are server-read; a control-only slice (catalog-sort) receives `showSort` from the route.
+- Unit tests now include `apps/shop/src/**/*.test.ts` for feature URL logic.
