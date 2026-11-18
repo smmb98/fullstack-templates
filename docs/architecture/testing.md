@@ -35,6 +35,9 @@ Reporters: `list` + `json`. Helpers in `apps/shop/e2e/_harness/`:
   contrast:check + knip. `storybook:build` is the only gate that compiles the story tree,
   so it catches broken story imports or addon APIs that `tsc` cannot see.
 - `./dev e2e --grep @<topic>` runs only the tagged tests you touched.
+- `./dev e2e --grep @storybook` opens every `Features/*` story in the running Storybook and
+  fails on an empty root or a console error. A Storybook build proves the bundle compiles;
+  this proves the story actually renders.
 - `./dev pnpm e2e:summary` prints only failures (title, file:line, first error, scenario,
   artifact paths, max 40 lines). Read that, not the full report.
 - Do not re-read passing specs or logs; trust the summary.

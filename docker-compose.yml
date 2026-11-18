@@ -1,4 +1,4 @@
-name: showcase
+name: fullstack-templates
 
 x-env: &env
   CI: "true"
@@ -17,7 +17,7 @@ x-dev-volumes: &dev-volumes
   - pnpm_store:/pnpm-store
 
 x-dev-service: &dev-service
-  image: showcase-dev
+  image: fullstack-templates-dev
   build:
     context: .
     dockerfile: docker/Dockerfile.dev
@@ -48,6 +48,10 @@ services:
   storybook:
     <<: *dev-service
     command: pnpm --filter @fullstack-templates/shop storybook
+    networks:
+      default:
+        aliases:
+          - storybook.localhost
     ports:
       - "6006:6006"
 
@@ -57,10 +61,12 @@ services:
     environment:
       <<: *env
       PLAYWRIGHT_BASE_URL: http://app.localhost:3000
-      PLAYWRIGHT_HOST_RESOLVER_RULES: MAP app.localhost app
+      PLAYWRIGHT_STORYBOOK_URL: http://storybook.localhost:6006
+      PLAYWRIGHT_HOST_RESOLVER_RULES: MAP app.localhost app, MAP storybook.localhost storybook
     volumes: *dev-volumes
     depends_on:
       - app
+      - storybook
 
 volumes:
   root_node_modules:
