@@ -1,26 +1,57 @@
+"use client";
+
 import type { ProductListResponse } from "@showcase/api-contract";
 import { Badge, Skeleton } from "@showcase/ui";
+import { useState } from "react";
 import { formatMoney } from "@/config/locale";
 
-function ProductCard({ product }: { product: ProductListResponse["items"][number] }) {
+type Product = ProductListResponse["items"][number];
+
+function ProductImage({ product }: { product: Product }) {
   const image = product.images[0];
+  const [failed, setFailed] = useState(false);
+
+  if (!image || failed) {
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-subtle px-4 text-center text-muted">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className="h-8 w-8 opacity-60"
+        >
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <circle cx="9" cy="10" r="1.5" />
+          <path d="m21 15-4.5-4.5L9 18" />
+        </svg>
+        <span className="text-xs font-medium tracking-wide uppercase">Image coming soon</span>
+        <span className="sr-only">No photo available for {product.title}.</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={image.src}
+      alt={image.alt}
+      width={image.width}
+      height={image.height}
+      loading="lazy"
+      onError={() => setFailed(true)}
+      className="h-full w-full object-cover"
+    />
+  );
+}
+
+function ProductCard({ product }: { product: Product }) {
   const onSale = product.compareAtPrice !== null;
 
   return (
     <li className="flex h-full flex-col overflow-hidden rounded-lg border border-line bg-surface">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-subtle">
-        {image ? (
-          <img
-            src={image.src}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <div aria-hidden="true" className="h-full w-full bg-subtle" />
-        )}
+        <ProductImage product={product} />
         <div className="absolute top-3 left-3 flex flex-wrap gap-2">
           {onSale ? <Badge tone="sale">Sale</Badge> : null}
           {!product.inStock ? <Badge tone="warning">Out of stock</Badge> : null}

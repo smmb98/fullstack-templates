@@ -1,4 +1,4 @@
-import type { ProductListResponse } from "@showcase/api-contract";
+import type { Facets, ProductListResponse } from "@showcase/api-contract";
 import { products } from "@showcase/mocks";
 import { AsyncRegion, type RegionState } from "@showcase/ui";
 import type { Meta, StoryObj } from "@storybook/nextjs";
@@ -22,9 +22,46 @@ const emptyData: ProductListResponse = {
   total: 0,
 };
 
-function Preview({ state, data }: { state: RegionState; data?: ProductListResponse }) {
+const missingImageData: ProductListResponse = {
+  items: [{ ...products[5], images: [] }],
+  page: 1,
+  pageSize: 12,
+  total: 1,
+};
+
+const facets: Facets = {
+  categories: [
+    { value: "Seating", label: "Seating", count: 4 },
+    { value: "Lighting", label: "Lighting", count: 3 },
+    { value: "Decor", label: "Decor", count: 3 },
+    { value: "Tableware", label: "Tableware", count: 2 },
+  ],
+  brands: [],
+  colors: [],
+  materials: [],
+};
+
+interface PreviewProps {
+  state: RegionState;
+  data?: ProductListResponse;
+  isLarge?: boolean;
+  facets?: Facets;
+}
+
+function Preview({ state, data, isLarge = false, facets: facetData = facets }: PreviewProps) {
   return (
-    <ListingFrame query={query}>
+    <ListingFrame
+      query={query}
+      searchText=""
+      isLarge={isLarge}
+      showClear
+      facets={facetData}
+      onSearchChange={() => undefined}
+      onSearchSubmit={() => undefined}
+      onSortChange={() => undefined}
+      onCategoryChange={() => undefined}
+      onClear={() => undefined}
+    >
       <AsyncRegion
         state={state}
         data={data}
@@ -58,6 +95,22 @@ export const Refetching: Story = {
 export const Ready: Story = {
   name: "ready",
   render: () => <Preview state="ready" data={readyData} />,
+};
+
+export const MissingImage: Story = {
+  name: "missing image",
+  render: () => <Preview state="ready" data={missingImageData} />,
+};
+
+export const LargeCollection: Story = {
+  name: "large collection",
+  render: () => (
+    <Preview
+      state="ready"
+      isLarge
+      data={{ ...readyData, total: 512 }}
+    />
+  ),
 };
 
 export const EmptyFirstUse: Story = {

@@ -20,3 +20,14 @@ export function fetchProducts(query: ListingQuery): Promise<ProductListResponse>
     query: { page: 1, pageSize: 12, ...query },
   });
 }
+
+/** URL for the listing; only non-default values are written so links stay readable. */
+export function listingHref(query: ListingQuery): string {
+  const params = new URLSearchParams();
+  if (query.q) params.set("q", query.q);
+  if (query.category) params.set("category", query.category);
+  if (query.sort && query.sort !== "relevance") params.set("sort", query.sort);
+  const search = params.toString();
+  return search ? `/products?${search}` : "/products";
+}
+

@@ -1,4 +1,5 @@
-import { Button } from "@showcase/ui";
+import type { Facets, ProductSort } from "@showcase/api-contract";
+import { Button, cn } from "@showcase/ui";
 import type { ReactNode } from "react";
 import type { ListingQuery } from "../api";
 
@@ -10,7 +11,43 @@ const sortOptions = [
   { value: "best-selling", label: "Best selling" },
 ] as const;
 
-export function ListingFrame({ query, children }: { query: ListingQuery; children: ReactNode }) {
+export interface ListingFrameProps {
+  query: ListingQuery;
+  searchText: string;
+  isLarge: boolean;
+  /** The empty state owns the clear-filters action, so the form hides its own. */
+  showClear: boolean;
+  facets?: Facets;
+  onSearchChange: (value: string) => void;
+  onSearchSubmit: () => void;
+  onSortChange: (value: ProductSort) => void;
+  onCategoryChange: (value: string | undefined) => void;
+  onClear: () => void;
+  children: ReactNode;
+}
+
+const chipClass = (active: boolean) =>
+  cn(
+    "inline-flex min-h-11 items-center gap-2 rounded-full border px-3 text-sm font-medium transition-colors",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+    active
+      ? "border-primary bg-primary text-on-primary"
+      : "border-line bg-surface text-ink hover:bg-subtle",
+  );
+
+export function ListingFrame({
+  query,
+  searchText,
+  isLarge,
+  showClear,
+  facets,
+  onSearchChange,
+  onSearchSubmit,
+  onSortChange,
+  onCategoryChange,
+  onClear,
+  children,
+}: ListingFrameProps) {
   const hasFilters = Boolean(query.q || query.category);
 
   return (
@@ -31,6 +68,10 @@ export function ListingFrame({ query, children }: { query: ListingQuery; childre
         action="/products"
         method="get"
         role="search"
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSearchSubmit();
+        }}
         className="mt-8 flex flex-col gap-3 border-y border-line py-4 sm:flex-row sm:items-end"
       >
         <div className="flex-1">
@@ -41,10 +82,17 @@ export function ListingFrame({ query, children }: { query: ListingQuery; childre
             id="catalog-q"
             name="q"
             type="search"
-            defaultValue={query.q ?? ""}
+            value={searchText}
+            onChange={(event) => onSearchChange(event.target.value)}
             placeholder="Try “oak” or “linen”"
+            aria-describedby={isLarge ? "catalog-search-hint" : undefined}
             className="min-h-11 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           />
+          {isLarge ? (
+            <p id="catalog-search-hint" className="mt-1 text-xs text-muted">
+              Large collection: press Search so we do not query on every keystroke.
+            </p>
+          ) : null}
         </div>
         <div className="sm:w-56">
           <label htmlFor="catalog-sort" className="mb-1 block text-sm font-medium text-ink">
@@ -53,7 +101,8 @@ export function ListingFrame({ query, children }: { query: ListingQuery; childre
           <select
             id="catalog-sort"
             name="sort"
-            defaultValue={query.sort ?? "relevance"}
+            value={query.sort ?? "relevance"}
+            onChange={(event) => onSortChange(event.target.value as ProductSort)}
             className="min-h-11 w-full rounded-md border border-line bg-surface px-3 text-sm text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             {sortOptions.map((option) => (
@@ -63,16 +112,50 @@ export function ListingFrame({ query, children }: { query: ListingQuery; childre
             ))}
           </select>
         </div>
-        <Button type="submit">Search</Button>
-        {hasFilters ? (
-          <a
-            href="/products"
+        {isLarge ? <Button type="submit">Search</Button> : null}
+        {hasFilters && showClear ? (
+          <button
+            type="button"
+            onClick={onClear}
             className="inline-flex min-h-11 items-center justify-center rounded-md px-3 text-sm font-medium text-ink underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             Clear filters
-          </a>
+          </button>
         ) : null}
       </form>
+
+      {facets && facets.categories.length > 0 ? (
+        <div
+          role="group"
+          aria-label="Filter by category"
+          className="mt-4 flex flex-wrap items-center gap-2 border-b border-line pb-4"
+        >
+          <span className="mr-1 text-sm font-medium text-ink">Category</span>
+          <button
+            type="button"
+            aria-pressed={!query.category}
+            onClick={() => onCategoryChange(undefined)}
+            className={chipClass(!query.category)}
+          >
+            All
+          </button>
+          {facets.categories.map((category) => {
+            const active = query.category === category.value;
+            return (
+              <button
+                key={category.value}
+                type="button"
+                aria-pressed={active}
+                onClick={() => onCategoryChange(active ? undefined : category.value)}
+                className={chipClass(active)}
+              >
+                {category.label}
+                <span className="text-xs opacity-70">{category.count}</span>
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
 
       <div className="mt-8">{children}</div>
     </div>

@@ -53,18 +53,80 @@ test.describe("catalog listing state matrix @catalog-listing", () => {
 });
 
 test.describe("catalog listing behaviour @catalog-listing", () => {
-  test("search updates the URL and narrows the grid @catalog-listing", async ({ page }) => {
+  test("typing filters live without a full page reload @catalog-listing", async ({ page }) => {
     await gotoWithScenario(page, "/products", "ok");
     await expectState(region(page), "ready");
     await expect(page.getByRole("heading", { name: "Alder Lounge Chair" })).toBeVisible();
+    await page.evaluate(() => {
+      (window as Window & { __catalogMarker?: string }).__catalogMarker = "alive";
+    });
 
     await page.getByLabel("Search the collection").fill("candle");
-    await page.getByRole("button", { name: "Search" }).click();
 
-    await expect(page).toHaveURL(/[?&]q=candle/);
+    await expect(page).toHaveURL(/[?&]q=candle/, { timeout: 5_000 });
     await expectState(region(page), "ready");
     await expect(page.getByRole("heading", { name: "Brass Candle Holder" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Alder Lounge Chair" })).toHaveCount(0);
+    await expect(
+      page.evaluate(() => (window as Window & { __catalogMarker?: string }).__catalogMarker),
+    ).resolves.toBe("alive");
+  });
+
+  test("a large collection waits for the Search button @catalog-listing", async ({ page }) => {
+    await gotoWithScenario(page, "/products", "large");
+    await expectState(region(page), "ready");
+    const searchButton = page.getByRole("button", { name: "Search" });
+    await expect(searchButton).toBeVisible();
+
+    await page.getByLabel("Search the collection").fill("candle");
+    await page.waitForTimeout(700);
+    await expect(page).not.toHaveURL(/[?&]q=candle/);
+
+    await searchButton.click();
+    await expect(page).toHaveURL(/[?&]q=candle/);
+    await expectState(region(page), "ready");
+    await expect(page.getByRole("heading", { name: "Brass Candle Holder" })).toBeVisible();
+  });
+
+  test("category chips filter the grid and reset @catalog-listing", async ({ page }) => {
+    await gotoWithScenario(page, "/products", "ok");
+    await expectState(region(page), "ready");
+
+    await page.getByRole("button", { name: /^Decor/ }).click();
+    await expect(page).toHaveURL(/[?&]category=Decor/);
+    await expectState(region(page), "ready");
+    await expect(page.getByRole("heading", { name: "Hand-Thrown Vase" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Alder Lounge Chair" })).toHaveCount(0);
+
+    await page.getByRole("button", { name: "All" }).click();
+    await expect(page).not.toHaveURL(/[?&]category=/);
+    await expect(page.getByRole("heading", { name: "Alder Lounge Chair" })).toBeVisible();
+  });
+
+  test("the vase has a real photo, not just an image element @catalog-listing", async ({
+    page,
+  }) => {
+    await gotoWithScenario(page, "/products", "ok");
+    await expectState(region(page), "ready");
+    const photo = page.getByAltText("Hand-thrown terracotta vase with a raw clay finish");
+    await photo.scrollIntoViewIfNeeded();
+    await expect(photo).toBeVisible();
+    // A visible element with a broken src still passes toBeVisible, so check the decode.
+    await expect
+      .poll(() =>
+        photo.evaluate(
+          (img: HTMLImageElement) => img.src.endsWith("/hand-thrown-vase.svg") && img.complete && img.naturalWidth > 0,
+        ),
+      )
+      .toBe(true);
+  });
+
+  test("a broken photo falls back to a labelled placeholder @catalog-listing", async ({ page }) => {
+    await page.route("**/hand-thrown-vase.svg", (route) => route.abort());
+    await gotoWithScenario(page, "/products", "ok");
+    await expectState(region(page), "ready");
+    await page.getByRole("heading", { name: "Hand-Thrown Vase" }).scrollIntoViewIfNeeded();
+    await expect(page.getByText("Image coming soon")).toBeVisible();
   });
 
   test("offline shows the network error and recovers on retry @catalog-listing", async ({

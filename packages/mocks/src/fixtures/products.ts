@@ -121,7 +121,7 @@ export const products: Product[] = [
     brand: null,
     category: "Decor",
     categoryPath: ["Decor", "Vases"],
-    images: [],
+    images: [image("hand-thrown-vase", "Hand-thrown terracotta vase with a raw clay finish")],
     inStock: true,
     stock: 9,
     colors: ["Terracotta"],

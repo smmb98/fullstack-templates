@@ -10,7 +10,8 @@ avoidable. A bug fix gets a regression test.
 ## Stories
 Title `Features/<id>/<Component>`; names like `Ready`, `Loading`, `Empty NoResults`,
 `Error Http`. One story per declared state, named `States/<State>`. Region stories set
-`parameters.scenario`; decorators provide QueryClient, ThemeProvider and MSW.
+`parameters.scenario`; decorators provide QueryClient, ThemeProvider and MSW (addon v3:
+`mswLoader` from `msw-storybook-addon/csf3`, handlers from `parameters.msw`).
 
 ## Playwright
 Projects: `desktop` (1280 wide) and `mobile` (375 wide, Chromium emulation).
@@ -30,7 +31,9 @@ Reporters: `list` + `json`. Helpers in `apps/shop/e2e/_harness/`:
   sleeps; wait on state or network.
 
 ## Running
-- `./dev pnpm check` = typecheck + lint + unit + flows:check + contrast:check + knip.
+- `./dev pnpm check` = typecheck + lint + unit + storybook:build + flows:check +
+  contrast:check + knip. `storybook:build` is the only gate that compiles the story tree,
+  so it catches broken story imports or addon APIs that `tsc` cannot see.
 - `./dev e2e --grep @<topic>` runs only the tagged tests you touched.
 - `./dev pnpm e2e:summary` prints only failures (title, file:line, first error, scenario,
   artifact paths, max 40 lines). Read that, not the full report.

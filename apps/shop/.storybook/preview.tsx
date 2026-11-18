@@ -1,16 +1,11 @@
 import { createMswHandlers } from "@showcase/mocks";
 import { ThemeProvider, type FontName, type SchemeName, type ThemeName } from "@showcase/ui";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { Decorator, Loader, Preview } from "@storybook/nextjs";
-import { initialize, mswLoader } from "msw-storybook-addon";
+import type { Decorator, Preview } from "@storybook/nextjs";
+import { mswLoader } from "msw-storybook-addon/csf3";
 import { useEffect, useState, type ReactNode } from "react";
 import "@showcase/ui/tokens.css";
 import "../src/app/globals.css";
-
-initialize({
-  onUnhandledRequest: "bypass",
-  serviceWorker: { url: "/mockServiceWorker.js" },
-});
 
 function StoryProviders({ children }: { children: ReactNode }) {
   const [client] = useState(
@@ -74,15 +69,13 @@ const withThemeAttributes: Decorator = (Story, context) => (
 );
 
 /** Maps `parameters.scenario` onto the same mock handlers the app uses. */
-const withScenario: Loader = (context) => ({
-  msw: {
-    handlers: createMswHandlers(context.parameters.scenario as string | undefined),
-  },
-});
-
 const preview: Preview = {
   decorators: [withProviders, withThemeAttributes],
-  loaders: [withScenario, mswLoader],
+  loaders: [mswLoader()],
+  // msw 3 reads handlers from `parameters.msw`; map our `scenario` shorthand onto them.
+  beforeEach({ msw, parameters }) {
+    msw.use(...createMswHandlers(parameters.scenario as string | undefined));
+  },
   initialGlobals: { theme: "ink", scheme: "light", font: "modern" },
   globalTypes: {
     theme: {
