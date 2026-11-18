@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@fullstack-templates/api-contract": ["../api-contract/src/index.ts"],
       "@fullstack-templates/mocks": ["../mocks/src/index.ts"],
