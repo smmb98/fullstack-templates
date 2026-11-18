@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, Nunito, Open_Sans, Outfit, Source_Sans_3 } from "next/font/google";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { isFeatureEnabled } from "@/features/flags";
+import { HeaderSearch } from "@/features/search";
 import { Providers } from "./providers";
 import "@fullstack-templates/ui/tokens.css";
 import "./globals.css";
@@ -56,11 +58,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               Skip to content
             </a>
             <header className="border-b border-line bg-surface">
-              <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4 sm:px-6">
-                <Link href="/" className="font-display text-xl tracking-tight text-ink">
+              <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-4 sm:px-6">
+                <Link href="/" className="order-1 font-display text-xl tracking-tight text-ink">
                   Hearth &amp; Grain
                 </Link>
-                <nav aria-label="Main" className="flex items-center gap-6 text-sm">
+                {isFeatureEnabled("search") ? <HeaderSearch /> : null}
+                <nav aria-label="Main" className="order-2 flex items-center gap-6 text-sm sm:order-3">
                   <Link href="/" className="text-muted hover:text-ink">
                     Home
                   </Link>

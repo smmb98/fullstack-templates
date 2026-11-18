@@ -2,6 +2,7 @@ import type { z } from "zod";
 import type { ScenarioName } from "./scenarios";
 import { scenarioNames } from "./scenarios";
 import { productListQuerySchema, productListResponseSchema } from "./schemas/product";
+import { searchSuggestQuerySchema, searchSuggestResponseSchema } from "./schemas/search";
 
 export interface EndpointDefinition {
   id: string;
@@ -22,8 +23,18 @@ export const productsListEndpoint = {
   scenarios: scenarioNames,
 } satisfies EndpointDefinition;
 
+export const searchSuggestEndpoint = {
+  id: "search.suggest",
+  method: "GET",
+  path: "/search/suggest",
+  query: searchSuggestQuerySchema,
+  response: searchSuggestResponseSchema,
+  scenarios: scenarioNames,
+} satisfies EndpointDefinition;
+
 export const endpoints = {
   productsList: productsListEndpoint,
+  searchSuggest: searchSuggestEndpoint,
 } as const;
 
 export type AnyEndpoint = EndpointDefinition;

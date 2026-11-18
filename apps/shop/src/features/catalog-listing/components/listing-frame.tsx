@@ -53,6 +53,7 @@ export function ListingFrame({
         action="/products"
         method="get"
         role="search"
+        aria-label="Catalog search"
         onSubmit={(event) => {
           event.preventDefault();
           onSearchSubmit();
